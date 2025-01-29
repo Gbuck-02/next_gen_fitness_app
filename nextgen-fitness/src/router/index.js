@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LogIn from '../views/LogIn.vue';
 import Home from '../views/Home.vue';
 import Clients from '../views/jobs/Clients.vue';
-import JobDetails from '../views/jobs/JobDetails.vue';
 import NotFound from '../views/NotFound.vue';
+import NewUser from '../views/NewUser.vue';
 
 const routes = [
   {
@@ -13,24 +13,25 @@ const routes = [
     props: true
   },
   {
+    path: '/newuser',
+    name: 'newuser',
+    component: NewUser,
+    props:true
+  },
+  {
     path: '/home',
     name: 'home',
     component: Home,
-    props: route => ({ // This allows you to pass the username and isCoach from route params
+    props: route => ({ //this allows you to pass objects from route params
       username: route.params.username,
-      isCoach: route.params.isCoach
+      isCoach: route.params.isCoach,
+      coach: route.params.coach
     })
   },
   {
     path: '/clients',
     name: 'clients',
     component: Clients
-  },
-  {
-    path: '/jobs/:id',
-    name: 'JobDetails',
-    component: JobDetails,
-    props: true
   },
   // redirect
   {

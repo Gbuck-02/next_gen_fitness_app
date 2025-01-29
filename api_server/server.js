@@ -1,24 +1,23 @@
+const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors'); // allows for the frontend to communicate with API
-// import routes
-const loginRoutes = require('./routes/loginRoutes');
-const newuserRoutes = require('./routes/newuserRoutes');
-
 const app = express();
-const port = 3000;
 
-// enable CORS for all routes 
+// enable CORS for all routes (network traffic security)
 app.use(cors());
 
-// parse JSON data
+// parse incoming JSON requests from front end
 app.use(bodyParser.json());
 
-// using the routes
+// various routes
+const loginRoutes = require('./routes/loginRoutes');
+const newuserRoutes = require('./routes/newuserRoutes');
 app.use('/api', loginRoutes);
-app.use('/api', newuserRoutes)
+app.use('/api', newuserRoutes);
 
-// start server
+// fire up server
+const port = 3000;
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
+

@@ -1,7 +1,7 @@
 <template>
-  <div class="login">
-    <h1>Welcome!!!</h1>
-    <h3>Please enter your username and password to log in</h3>
+  <div class="newUser">
+    <h1>Create a New Account</h1>
+    <h3>Please enter a username and password</h3>
 
     <label>Username:</label>
     <input type="text" v-model="user" />
@@ -9,8 +9,7 @@
     <label>Password:</label>
     <input type="password" required v-model="password" />
     <br />
-    <button @click="handleLogin">Log In</button>
-    <button @click="addNewUser">Sign Up</button>
+    <button @click="newUserLogin">Sign Me Up!</button>
   </div>
 </template>
 
@@ -23,29 +22,28 @@ export default {
     };
   },
   methods: {
-    handleLogin() {
-      // prepare request data
-      const loginData = {
-        username: this.user,
-        password: this.password,
-
+    newUserLogin() {
+      const newUserData = {
+        username: this.user,   //username entered by the user
+        pass: this.password,   //password entered by the user
+        isCoach: false, //whether the user is a coach(always false)
       };
-      console.log(loginData)
 
-      //make POST request to API
-      fetch('http://localhost:3000/api/login', {
+      fetch('http://localhost:3000/api/newuser', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(loginData),
+        body: JSON.stringify(newUserData),  // convert data to JSON for API
       })
         .then((response) => response.json())
         .then((data) => {
+          //check for errors or success in the response
           if (data.error) {
-            alert(data.error);
+            alert(data.error);  //display error message
           } else {
-            //login successful
+            console.log('User created:', data.message);  //log the success message
+            //redirect to the home page
             this.$router.push({
               name: 'home',
               query: {
@@ -58,16 +56,10 @@ export default {
         })
         .catch((error) => {
           console.error('Error:', error);
-          alert('An error occurred while logging in.');
+          alert('An error occurred while creating the user.');
         });
     },
 
-    addNewUser(){
-      this.$router.push({
-        name: 'newuser'
-      })
-      console.log('pushed')
-    }
   },
 };
 </script>

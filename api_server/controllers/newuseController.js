@@ -1,18 +1,29 @@
-const { getUsername } = require('../models/newuserModel'); // import model
+const bcrypt = require('bcrypt'); // Import bcrypt
+const { addUser } = require('../models/newuserModel'); // Import the model
 
 const newUser = (req, res) => {
-  const { username } = req.body;
+  const { username, pass, isCoach } = req.body;
 
-  // Check if the username already exists in the database
-  getUsername(username, (err, result) => {
+  // Use bcrypt to hash the password
+  bcrypt.hash(pass, 10, (err, hashedPassword) => {
     if (err) {
-      return res.status(500).json({ error: 'Server error' });
+      console.error('Error hashing password:', err);
+      return res.status(500).json({ error: 'Failed to hash password' });
     }
-    if (result === 1) {
-      // If the username already exists in the database
-      return res.status(400).json({ error: 'Username already taken' });
-    }
-    // further logic like user creation or other tasks here (if needed)
+
+    // Call the model to insert the new user with the hashed password
+    addUser(username, hashedPassword, isCoach, (err, result) => {
+      if (err) {
+        console.error("Database insert error:", err);
+        return res.status(500).json({ error: 'Failed to create user' });
+      }
+
+      // If insertion is successful, return the user data back to the frontend
+      res.status(200).json({
+        username: username,
+        isCoach: isCoach,
+      });
+    });
   });
 };
 

@@ -1,15 +1,15 @@
 const mysql = require('mysql2');
 require('dotenv').config();
-const dbPassword = process.env.DB_PASSWORD;
 
+// Set up the database connection
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: dbPassword,
-  database: 'meal_tracker',
+  password: process.env.DB_PASSWORD, // Ensure this is correctly set in your .env file
+  database: 'meal_tracker', // Your database name
 });
 
-// connect to database
+// Connect to the database
 db.connect((err) => {
   if (err) {
     console.error('Error connecting to the database:', err);
@@ -18,19 +18,20 @@ db.connect((err) => {
   console.log('Connected to the database');
 });
 
-// gets a user by username
-const getUsername = (username, callback) => {
-  const query = 'SELECT username FROM clients WHERE username = ?';
-  db.query(query, [username], (err, results) => {
+// Function to add a new user to the database
+const addUser = (username, pass, isCoach, callback) => {
+  // SQL query to insert a new user
+  const query = 'INSERT INTO clients (username, pass, isCoach) VALUES (?, ?, ?)';
+
+  // Execute the query with the provided values
+  db.query(query, [username, pass, isCoach], (err, result) => {
     if (err) {
+      console.error('Error inserting user:', err);  // Log the error for debugging
       return callback(err);
     }
-    if (results.length > 0) {
-      return callback(null, 1);  // username already exists
-    }
-    callback(null, 0);  // username is available (no issues found)
+    // Return the result to the callback (you could also send the user ID or other info)
+    callback(null, { message: 'User created successfully', userId: result.insertId });
   });
-  
 };
 
-module.exports = { getUsername };
+module.exports = { addUser };

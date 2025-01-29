@@ -2,7 +2,7 @@ const mysql = require('mysql2');
 require('dotenv').config();
 const dbPassword = process.env.DB_PASSWORD;
 console.log("here")
-
+ 
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -21,7 +21,7 @@ db.connect((err) => {
 
 // gets a user by username
 const getUserByUsername = (username, callback) => {
-  const query = 'SELECT username, pass, isCoach, Coach FROM clients WHERE username = ?';
+  const query = 'SELECT username, pass, isCoach, coach FROM clients WHERE username = ?';
   db.query(query, [username], (err, results) => {
     if (err) {
       return callback(err);
