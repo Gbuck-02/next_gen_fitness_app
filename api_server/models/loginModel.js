@@ -1,25 +1,6 @@
-const mysql = require('mysql2');
-require('dotenv').config();
-const dbPassword = process.env.DB_PASSWORD;
-console.log("here")
- 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: dbPassword,
-  database: 'meal_tracker',
-});
+const db = require('../db'); //import the shared db connection
 
-// connect to database
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-    return;
-  }
-  console.log('Connected to the database');
-});
-
-// gets a user by username
+//gets a user by username
 const getUserByUsername = (username, callback) => {
   const query = 'SELECT username, pass, isCoach, coach FROM clients WHERE username = ?';
   db.query(query, [username], (err, results) => {

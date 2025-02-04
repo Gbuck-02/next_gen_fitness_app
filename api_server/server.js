@@ -3,21 +3,22 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 
-// enable CORS for all routes (network traffic security)
+//enable CORS for all routes (network traffic security)
 app.use(cors());
 
-// parse incoming JSON requests from front end
+//parse incoming JSON requests from front end
 app.use(bodyParser.json());
 
-// various routes
+//various routes
 const loginRoutes = require('./routes/loginRoutes');
 const newuserRoutes = require('./routes/newuserRoutes');
+const getstatsRoutes = require('./routes/getstatsRoutes');
 app.use('/api', loginRoutes);
 app.use('/api', newuserRoutes);
+app.use('/api', getstatsRoutes);
 
-// fire up server
+//fire up server
 const port = 3000;
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
-

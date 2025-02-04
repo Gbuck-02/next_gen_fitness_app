@@ -1,22 +1,4 @@
-const mysql = require('mysql2');
-require('dotenv').config();
-
-// Set up the database connection
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: process.env.DB_PASSWORD, // Ensure this is correctly set in your .env file
-  database: 'meal_tracker', // Your database name
-});
-
-// Connect to the database
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-    return;
-  }
-  console.log('Connected to the database');
-});
+const db = require('../db'); // Import the shared db connection
 
 // Function to add a new user to the database
 const addUser = (username, pass, isCoach, callback) => {
