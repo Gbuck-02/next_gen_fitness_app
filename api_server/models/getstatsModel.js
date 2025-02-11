@@ -1,37 +1,37 @@
-const db = require('../db'); //import the shared db connection
+const db = require('../db'); // import the db connection
 
-//function to get client ID by username
-const getClientIdByUsername = async (username) => {
-  try {
-    const [rows] = await db.execute('SELECT id FROM clients WHERE username = ?', [username]);
-    if (rows.length === 0) {
-      return null; //no user found
+// Function to get user ID by username using callbacks
+const getClientIdByUsername = (username, callback) => {
+  const query = 'SELECT id FROM clients WHERE username = ?';
+  db.query(query, [username], (err, results) => {
+    if (err) {
+      return callback('Error fetching user ID: ' + err.message); // Handle error
     }
-    return rows[0].id; // Return the client ID
-  } catch (error) {
-    console.error(error);
-    throw new Error('Error fetching client data');
-  }
+    if (results.length === 0) {
+      return callback(null, null); // user not found
+    }
+    callback(null, results[0]); // return first matching user
+  });
 };
 
-// Function to get meal statistics for a given client ID and date
-const getMealStatsByClientIdAndDate = async (clientId, date) => {
-  try {
-    const [rows] = await db.execute(
-      `SELECT 
-        DATE_FORMAT(meal_date, '%W, %M %d, %Y') AS formatted_date,
-        DATE_FORMAT(meal_time, '%l:%i %p') AS formatted_time, 
-        food, calories, fat, carbs, protein, comments
-      FROM meal_statistics 
-      WHERE client_id = ? AND DATE(meal_date) = ? 
-      ORDER BY meal_time DESC`, // Use DATE() to match only the date part
-      [clientId, date] // Pass the clientId and date as parameters
-    );
-    return rows; // Return the meal stats for the client on the specified date
-  } catch (error) {
-    console.error(error);
-    throw new Error('Error fetching meal statistics');
-  }
+// Function to get meal stats by client ID and date using callbacks
+const getMealStatsByDate = (clientId, date, callback) => {
+  const query = `SELECT 
+                    DATE_FORMAT(meal_date, '%W, %M %d, %Y') AS formatted_date,
+                    DATE_FORMAT(meal_time, '%l:%i %p') AS formatted_time, 
+                    food, calories, fat, carbs, protein, comments
+                 FROM meal_statistics 
+                 WHERE client_id = ? AND DATE(meal_date) = ?`;
+
+  db.query(query, [clientId, date], (err, rows) => {
+    if (err) {
+      return callback('Error fetching meal stats: ' + err.message); // Handle error
+    }
+    if (!rows || rows.length === 0) {
+      return callback(null, []); // No stats found
+    }
+    callback(null, rows); // Return meal stats
+  });
 };
 
-module.exports = { getClientIdByUsername, getMealStatsByClientIdAndDate };
+module.exports = { getClientIdByUsername, getMealStatsByDate };
