@@ -2,7 +2,9 @@
   <div class="home-container">
     <button @click="redirect">Log Out</button>
 
-    <!-- Display clients page link if the user is a coach -->
+    <button @click="addMeal">Add Meal</button>
+
+    <!-- Display clients page button if the user is a coach -->
     <div v-if="isCoach">
       <router-link :to="{ name: 'clients', query: { coach: username } }">
         <button>Go to Clients Page</button>
@@ -68,6 +70,17 @@ export default {
   methods: {
     redirect() {
       this.$router.push({ name: 'login' });
+    },
+
+    addMeal() {
+      this.$router.push({
+        name: 'addmeal',
+          query: {
+            username: this.username,
+            isCoach: this.isCoach,
+            coach: this.coach
+          },
+      });
     },
     async fetchMealStats() {
         console.log(`Fetching meal stats for ${this.currentDate}...`); // Debugging
@@ -154,6 +167,10 @@ export default {
 
 button {
   margin: 10px;
+  cursor: pointer;
 }
-</style>
 
+button:hover {
+    background-color: #0854cc;
+  }
+</style>

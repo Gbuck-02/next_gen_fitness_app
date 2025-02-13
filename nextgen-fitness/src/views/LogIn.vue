@@ -30,7 +30,6 @@ export default {
         password: this.password,
 
       };
-      console.log(loginData)
 
       //make POST request to API
       fetch('http://localhost:3000/api/login', {
@@ -66,7 +65,6 @@ export default {
       this.$router.push({
         name: 'newuser'
       })
-      console.log('pushed')
     }
   },
 };
@@ -83,4 +81,8 @@ button {
   text-align: center;
   cursor: pointer;
 }
+
+button:hover {
+    background-color: #0854cc;
+  }
 </style>

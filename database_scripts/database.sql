@@ -28,9 +28,6 @@ INSERT INTO meal_statistics(client_id, meal_date, meal_time, food, calories, fat
 (1, CURRENT_DATE, CURRENT_TIME, 'protein shake', 25.0, 0.0, 0.0, 20.0,""),
 (2, CURRENT_DATE, CURRENT_TIME, 'salad', 20, 0, 0, 0, "Not sure how many for fat.carbs etc.");
 
-INSERT INTO meal_statistics(client_id, meal_date, meal_time, food, calories, fat, carbs, protein, comments) VALUES 
-(1, CURRENT_DATE, CURRENT_TIME, 'salad', 20, 0, 0, 0, "Not sure how many for fat.carbs etc.");
-
 /*gets all info for a specific user*/
 SELECT DATE_FORMAT(meal_date, '%W, %M %d, %Y') AS formatted_date,
        DATE_FORMAT(meal_time, '%l:%i %p') AS formatted_time, 

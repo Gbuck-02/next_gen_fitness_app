@@ -1,20 +1,20 @@
-const db = require('../db'); // import the db connection
+const db = require('../db'); //import the db connection
 
-// Function to get user ID by username using callbacks
+//function to get user ID by username
 const getClientIdByUsername = (username, callback) => {
   const query = 'SELECT id FROM clients WHERE username = ?';
   db.query(query, [username], (err, results) => {
     if (err) {
-      return callback('Error fetching user ID: ' + err.message); // Handle error
+      return callback('Error fetching user ID: ' + err.message);
     }
     if (results.length === 0) {
-      return callback(null, null); // user not found
+      return callback(null, null); //user not found
     }
-    callback(null, results[0]); // return first matching user
+    callback(null, results[0]); //return first matching user
   });
 };
 
-// Function to get meal stats by client ID and date using callbacks
+//function to get meal stats by client ID and date
 const getMealStatsByDate = (clientId, date, callback) => {
   const query = `SELECT 
                     DATE_FORMAT(meal_date, '%W, %M %d, %Y') AS formatted_date,
@@ -25,12 +25,12 @@ const getMealStatsByDate = (clientId, date, callback) => {
 
   db.query(query, [clientId, date], (err, rows) => {
     if (err) {
-      return callback('Error fetching meal stats: ' + err.message); // Handle error
+      return callback('Error fetching meal stats: ' + err.message);
     }
     if (!rows || rows.length === 0) {
-      return callback(null, []); // No stats found
+      return callback(null, []); //no stats found
     }
-    callback(null, rows); // Return meal stats
+    callback(null, rows); //return meal stats
   });
 };
 

@@ -13,9 +13,11 @@ app.use(bodyParser.json());
 const loginRoutes = require('./routes/loginRoutes');
 const newuserRoutes = require('./routes/newuserRoutes');
 const getstatsRoutes = require('./routes/getstatsRoutes');
+const addmealRoutes = require('./routes/addmealRoutes');
 app.use('/api', loginRoutes);
 app.use('/api', newuserRoutes);
 app.use('/api', getstatsRoutes);
+app.use('/api', addmealRoutes)
 
 //fire up server
 const port = 3000;
