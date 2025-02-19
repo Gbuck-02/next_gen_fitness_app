@@ -4,8 +4,10 @@
 
     <button @click="addMeal">Add Meal</button>
 
+    <button @click="addPreviousMeal">Quick Add a Meal</button>
+
     <!-- Display clients page button if the user is a coach -->
-    <div v-if="isCoach">
+    <div v-if="isCoach === 'true'">
       <router-link :to="{ name: 'clients', query: { coach: username } }">
         <button>Go to Clients Page</button>
       </router-link>
@@ -15,7 +17,7 @@
     <p class="username-message">Welcome, {{ username }}</p>
 
     <!-- Display coach information if the user is not a coach -->
-    <div v-if="!isCoach && coach">
+    <div v-if="coach">
       <p>Your coach is: {{ coach }}</p>
     </div>
 
@@ -46,7 +48,7 @@ export default {
   data() {
     return {
       username: this.$route.query.username,
-      isCoach: this.$route.query.isCoach === '1',
+      isCoach: this.$route.query.isCoach,
       coach: this.$route.query.coach || null,
       currentDate: new Date().toISOString().split('T')[0], // Store the selected date
       mealStats: [] // Store meal stats
@@ -79,7 +81,18 @@ export default {
             username: this.username,
             isCoach: this.isCoach,
             coach: this.coach
-          },
+          }
+      });
+    },
+
+    addPreviousMeal(){
+      this.$router.push({
+        name: 'addold',
+          query:{
+            username: this.username,
+            isCoach: this.isCoach,
+            coach: this.coach
+        }
       });
     },
     async fetchMealStats() {

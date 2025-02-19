@@ -5,6 +5,7 @@ import Clients from '../views/jobs/Clients.vue';
 import NotFound from '../views/NotFound.vue';
 import NewUser from '../views/NewUser.vue';
 import AddMeal from '../views/AddMeal.vue';
+import AddPreviousMeal from '../views/AddPreviousMeal.vue';
 
 const routes = [
   {
@@ -33,6 +34,16 @@ const routes = [
     path: '/addmeal',
     name: 'addmeal',
     component: AddMeal,
+    props: route => ({
+      username: route.params.username,
+      isCoach: route.params.isCoach,
+      coach: route.params.coach
+    })
+  },
+  {
+    path: '/addold',
+    name: 'addold',
+    component: AddPreviousMeal,
     props: route => ({
       username: route.params.username,
       isCoach: route.params.isCoach,

@@ -18,7 +18,7 @@ const loginUser = (req, res) => {
       if (user.pass === password) {
         return res.json({
           username: user.username,
-          isCoach: user.isCoach,
+          isCoach: Boolean(user.isCoach),
           coach: user.coach,
         });
       } else {
@@ -35,7 +35,7 @@ const loginUser = (req, res) => {
         // return user data for frontend
         return res.json({
           username: user.username,
-          isCoach: user.isCoach,
+          isCoach: Boolean(user.isCoach),
           coach: user.coach,
         });
       } else {

@@ -1,21 +1,26 @@
 <template>
     <div class="addMeal-container">
       <button @click="redirect">Log Out</button>
+
+      <button @click="home">Home</button>
+
+      <h1 class="header-message">Enter a New Meal</h1>
   
       <label for="food">Enter Meal/Food Eaten:</label>
       <input type="text" id="food" v-model="food" placeholder="Enter food" />
   
       <label for="calories">Enter Calories:</label>
-      <input type="number" id="calories" v-model="calories" placeholder="Enter calories" />
+      <input type="number" id="calories" v-model="calories" placeholder="Enter calories" min="0" @input="calories = calories < 0 ? '' : calories" />
   
       <label for="fat">Enter Fat (g):</label>
-      <input type="number" id="fat" v-model="fat" placeholder="Enter fat (g)" />
+      <input type="number" id="fat" v-model="fat" placeholder="Enter fat (g)" min="0" @input="fat = fat < 0 ? '' : fat" />
   
-      <label for="carbs">Enter Carbs (g):</label>
-      <input type="number" id="carbs" v-model="carbs" placeholder="Enter carbs (g)" />
+      <label for="carbs">Carbs (g):</label>
+      <input type="number" id="carbs" v-model="carbs" placeholder="Enter carbs (g)" min="0" @input="carbs = carbs < 0 ? '' : carbs" />
+
   
       <label for="protein">Enter Protein (g):</label>
-      <input type="number" id="protein" v-model="protein" placeholder="Enter protein (g)" />
+      <input type="number" id="protein" v-model="protein" placeholder="Enter protein (g)" min="0" @input="protein = protein < 0 ? '' : protein" />
   
       <label for="comments">Enter Comments:</label>
       <textarea id="comments" v-model="comments" placeholder="Additional notes"></textarea>
@@ -42,6 +47,16 @@
   methods: {
     redirect() {
       this.$router.push({ name: 'login' });
+    },
+    home(){
+      this.$router.push({
+        name: 'home',
+          query: {
+            username: this.username,
+            isCoach: this.isCoach,
+            coach: this.coach
+          }
+      });
     },
     submitData() {
       const meal = {
@@ -78,10 +93,7 @@
             });
             }
         });
-}
-
-
-
+      }
     }
   }
   </script>
@@ -95,6 +107,11 @@
     text-align: center;
     max-width: 400px;
     margin: auto;
+  }
+
+  .header-message {
+    font-size: 2em;
+    color: #0b6dff;
   }
   
   label {
