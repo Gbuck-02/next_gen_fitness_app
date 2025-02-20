@@ -31,9 +31,22 @@
     <!-- Display meal statistics -->
     <div class="meal-stats" v-if="mealStats.length > 0">
       <div v-for="(meal, index) in mealStats" :key="index" class="meal-item">
-        <p><strong>{{ meal.formatted_time }}</strong> - {{ meal.food }}</p>
-        <p>Calories: {{ meal.calories }}, Fat: {{ meal.fat }}, Carbs: {{ meal.carbs }}, Protein: {{ meal.protein }}</p>
-        <p>Comments: {{ meal.comments }}</p>
+        <div class="meal-content">
+          <p><strong>{{ meal.formatted_time }}</strong> - {{ meal.food }}</p>
+          <p>Calories: {{ meal.calories }}, Fat: {{ meal.fat }}, Carbs: {{ meal.carbs }}, Protein: {{ meal.protein }}</p>
+          <p>Comments: {{ meal.comments }}</p>
+        </div>
+        
+        <!-- Three-Dot Menu Icon -->
+        <div class="menu-container">
+          <span class="menu-icon" @click.stop="toggleMenu(index)">⋮</span>
+          
+          <!-- Edit Meal Button (Toggled) -->
+          <button v-if="activeMenu === index" class="edit-button" @click.stop="editMeal(meal)">
+            Edit Meal
+          </button>
+        </div>
+        
         <hr />
       </div>
     </div>
@@ -50,6 +63,7 @@ export default {
       username: this.$route.query.username,
       isCoach: this.$route.query.isCoach,
       coach: this.$route.query.coach || null,
+      activeMenu: null,
       currentDate: new Date().toISOString().split('T')[0], // Store the selected date
       mealStats: [] // Store meal stats
     };
@@ -123,10 +137,28 @@ export default {
 
         console.log(`Changed date to: ${this.currentDate}`); // Debugging
         this.fetchMealStats();
+    },
+    toggleMenu(index) {
+      // If the same menu is clicked, close it; otherwise, open the clicked one
+      this.activeMenu = this.activeMenu === index ? null : index;
+    },
+    editMeal(meal) {
+      console.log("Editing meal:", meal);
+      // Add your edit functionality here
+    },
+    closeMenu() {
+      this.activeMenu = null;
     }
   },
   created() {
     this.fetchMealStats();
+  },
+  mounted() {
+    // Close menu when clicking outside
+    document.addEventListener("click", this.closeMenu);
+  },
+  beforeUnmount() {
+    document.removeEventListener("click", this.closeMenu);
   }
 };
 </script>
@@ -150,6 +182,14 @@ export default {
   margin-bottom: 20px;
 }
 
+button{
+    cursor: pointer;
+}
+  
+button:hover {
+    background-color: #0854cc;
+}
+
 .date-navigation {
   margin: 20px 0;
 }
@@ -167,23 +207,49 @@ export default {
   border-radius: 8px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   text-align: left;
+  position: relative;
 }
 
 .meal-item {
-  padding: 10px;
+  position: relative;
+  padding: 15px;
   border-bottom: 1px solid #ddd;
 }
 
-.meal-item:last-child {
-  border-bottom: none;
+.menu-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
-button {
-  margin: 10px;
+.menu-icon {
   cursor: pointer;
+  font-size: 20px;
+  padding: 5px;
+  color: #555;
 }
 
-button:hover {
-    background-color: #0854cc;
-  }
+.menu-icon:hover {
+  color: #0b6dff;
+}
+
+.edit-button {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  border: 2px solid black; /* Set the border color to black */
+  background-color: #0b6dff; /* Background color */
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.edit-button:hover {
+  background-color: #0854cc; /* Darker shade on hover */
+}
+
+
 </style>
