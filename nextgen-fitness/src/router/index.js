@@ -59,6 +59,7 @@ const routes = [
       username: route.params.username,
       isCoach: route.params.isCoach,
       coach: route.params.coach,
+      date: route.params.date,
       meal: route.query.meal
     })
   },

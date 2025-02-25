@@ -139,7 +139,8 @@ export default {
           username: this.username,
           isCoach: this.isCoach,
           coach: this.coach,
-          meal: encodedMeal
+          meal: encodedMeal,
+          date: this.currentDate
         }
       });
     },

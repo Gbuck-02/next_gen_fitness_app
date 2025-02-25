@@ -34,6 +34,7 @@ export default {
             username: this.$route.query.username,
             isCoach: this.$route.query.isCoach,
             coach: this.$route.query.coach || null,
+            date: this.$route.query.date,
             meal: this.$route.query.meal ? this.decodeBase64(this.$route.query.meal) : null,
             calories: '',
             fat: '',
@@ -57,8 +58,6 @@ export default {
             this.protein = mealObject.protein || '';
             this.comments = mealObject.comments || '';
             this.food = mealObject.food;
-            this.formattedDate = mealObject.formatted_date;
-            console.log(this.formattedDate)
         }
     },
     methods: {
@@ -78,46 +77,7 @@ export default {
         decodeBase64(encodedData) {
             return JSON.parse(decodeURIComponent(atob(encodedData)));
         },
-        reformatToSQLDate(formattedDate) {
-        console.log("Formatted Date Input:", formattedDate); // Log the formatted date input
-
-        // Split the formatted date string into parts
-        const dateParts = formattedDate.split(', '); // Split by comma and space
-
-        console.log("Extracted Date Parts:", dateParts);
-
-        // Check if dateParts has the expected length (should be 3)
-        if (dateParts.length < 3) {
-            throw new Error('Formatted date does not contain enough parts.');
-        }
-
-        const monthDay = dateParts[1].trim().split(' '); // Extracts ['February', '25']
-        const year = dateParts[2].trim(); // Extracts '2025'
-
-        console.log("Month and Day:", monthDay, "Year:", year);
-
-        // Validate monthDay array length
-        if (monthDay.length < 2) {
-            throw new Error('Month and day do not contain enough parts.');
-        }
-
-        const monthMap = {
-            January: '01', February: '02', March: '03',
-            April: '04', May: '05', June: '06',
-            July: '07', August: '08', September: '09',
-            October: '10', November: '11', December: '12'
-        };
-
-        const month = monthMap[monthDay[0]]; // Convert month name to number
-        const day = monthDay[1].padStart(2, '0'); // Ensure day is two digits
-
-        console.log("Month:", month, "Day:", day);
-
-        // Return formatted date in YYYY-MM-DD format
-        return `${year}-${month}-${day}`;
-    },
         editMeal() {
-            const date = this.reformatToSQLDate(this.formattedDate);
             const editedMeal = {
                 food: this.food,
                 calories: this.calories,
@@ -125,7 +85,7 @@ export default {
                 carbs: this.carbs,
                 protein: this.protein,
                 comments: this.comments,
-                date: date,
+                date: this.date,
             };
             console.log(editedMeal)
 /*
