@@ -4,6 +4,8 @@
 
       <button @click="home">Home</button>
 
+      <button @click="addPreviousMeal">Quick Add a Meal</button>
+
       <h1 class="header-message">Enter a New Meal</h1>
   
       <label for="food">Enter Meal/Food Eaten:</label>
@@ -56,6 +58,16 @@
             isCoach: this.isCoach,
             coach: this.coach
           }
+      });
+    },
+    addPreviousMeal(){
+      this.$router.push({
+        name: 'addold',
+          query:{
+            username: this.username,
+            isCoach: this.isCoach,
+            coach: this.coach
+        }
       });
     },
     submitData() {

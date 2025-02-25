@@ -6,6 +6,7 @@ import NotFound from '../views/NotFound.vue';
 import NewUser from '../views/NewUser.vue';
 import AddMeal from '../views/AddMeal.vue';
 import AddPreviousMeal from '../views/AddPreviousMeal.vue';
+import EditMeal from '../views/EditMeal.vue';
 
 const routes = [
   {
@@ -48,6 +49,17 @@ const routes = [
       username: route.params.username,
       isCoach: route.params.isCoach,
       coach: route.params.coach
+    })
+  },
+  {
+    path: '/editmeal',
+    name: 'editmeal',
+    component: EditMeal,
+    props: route => ({
+      username: route.params.username,
+      isCoach: route.params.isCoach,
+      coach: route.params.coach,
+      meal: route.query.meal
     })
   },
   {

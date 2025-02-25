@@ -4,8 +4,6 @@
 
     <button @click="addMeal">Add Meal</button>
 
-    <button @click="addPreviousMeal">Quick Add a Meal</button>
-
     <!-- Display clients page button if the user is a coach -->
     <div v-if="isCoach === 'true'">
       <router-link :to="{ name: 'clients', query: { coach: username } }">
@@ -98,17 +96,6 @@ export default {
           }
       });
     },
-
-    addPreviousMeal(){
-      this.$router.push({
-        name: 'addold',
-          query:{
-            username: this.username,
-            isCoach: this.isCoach,
-            coach: this.coach
-        }
-      });
-    },
     async fetchMealStats() {
         console.log(`Fetching meal stats for ${this.currentDate}...`); // Debugging
         try {
@@ -139,12 +126,22 @@ export default {
         this.fetchMealStats();
     },
     toggleMenu(index) {
-      // If the same menu is clicked, close it; otherwise, open the clicked one
       this.activeMenu = this.activeMenu === index ? null : index;
     },
+    encodeBase64(data) {
+    return btoa(encodeURIComponent(JSON.stringify(data)));
+    },
     editMeal(meal) {
-      console.log("Editing meal:", meal);
-      // Add your edit functionality here
+      const encodedMeal = this.encodeBase64(JSON.stringify(meal));
+      this.$router.push({
+        name: 'editmeal',
+        query: {
+          username: this.username,
+          isCoach: this.isCoach,
+          coach: this.coach,
+          meal: encodedMeal
+        }
+      });
     },
     closeMenu() {
       this.activeMenu = null;
