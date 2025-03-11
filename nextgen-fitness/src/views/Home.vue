@@ -6,7 +6,7 @@
 
     <!-- Display clients page button if the user is a coach -->
     <div v-if="isCoach === 'true'">
-      <router-link :to="{ name: 'clients', query: { coach: username } }">
+      <router-link :to="{ name: 'clients', query: { username: this.username, isCoach: this.isCoach, coach: this.coach } }">
         <button>Go to Clients Page</button>
       </router-link>
     </div>
@@ -97,12 +97,10 @@ export default {
       });
     },
     async fetchMealStats() {
-        console.log(`Fetching meal stats for ${this.currentDate}...`); // Debugging
         try {
           const response = await fetch(`http://localhost:3000/api/getStats?username=${this.username}&date=${this.currentDate}`);
             if (response.ok) {
                 const data = await response.json();
-                console.log("Meal Stats Response:", data); // Debugging
                 this.mealStats = data; // Update mealStats with the response directly
             } else {
                 console.error("Error fetching meal stats:", response.status);
@@ -121,8 +119,6 @@ export default {
             date.setDate(date.getDate() - 1);
         }
         this.currentDate = date.toISOString().split('T')[0];
-
-        console.log(`Changed date to: ${this.currentDate}`); // Debugging
         this.fetchMealStats();
     },
     toggleMenu(index) {
@@ -180,12 +176,25 @@ export default {
   margin-bottom: 20px;
 }
 
-button{
-    cursor: pointer;
+button {
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: #0b6dff;
+  color: white;
+  margin: 10px 5px;
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
-  
+
 button:hover {
-    background-color: #0854cc;
+  background-color: #0854cc;
+  transform: translateY(-2px);
+}
+
+button:focus {
+  outline: none;
 }
 
 .date-navigation {
@@ -235,8 +244,8 @@ button:hover {
   position: absolute;
   top: 30px;
   right: 0;
-  border: 2px solid black; /* Set the border color to black */
-  background-color: #0b6dff; /* Background color */
+  border: 2px solid black;
+  background-color: #0b6dff;
   color: white;
   padding: 6px 12px;
   border-radius: 4px;
@@ -246,8 +255,6 @@ button:hover {
 }
 
 .edit-button:hover {
-  background-color: #0854cc; /* Darker shade on hover */
+  background-color: #0854cc;
 }
-
-
 </style>

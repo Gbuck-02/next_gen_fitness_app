@@ -42,22 +42,32 @@ export default {
             protein: '',
             comments: '',
             food: '',
-            formattedDate: '',
-            formattedTime: ''
+            originalMeal: null
         };
     },
     created() {
         if (this.$route.query.meal) {
-            // Decode the meal from the query parameter
             this.meal = this.decodeBase64(this.$route.query.meal);
             const mealObject = JSON.parse(this.meal);
-            // Assign values if they exist
+
             this.calories = mealObject.calories || '';
             this.fat = mealObject.fat || '';
             this.carbs = mealObject.carbs || '';
             this.protein = mealObject.protein || '';
             this.comments = mealObject.comments || '';
             this.food = mealObject.food;
+
+            this.originalMeal = {
+                food: this.food,
+                calories: this.calories,
+                fat: this.fat,
+                carbs: this.carbs,
+                protein: this.protein,
+                comments: this.comments,
+                date: this.date,
+            };
+
+            this.originalMeal = JSON.parse(JSON.stringify(this.originalMeal));
         }
     },
     methods: {
@@ -87,12 +97,17 @@ export default {
                 comments: this.comments,
                 date: this.date,
             };
-            console.log(editedMeal)
-/*
-            fetch(`http://localhost:3000/api/updateMeal?username=${this.username}`, {
+
+            const mealsData = {
+                originalMeal: this.originalMeal,
+                editedMeal: editedMeal,
+            };
+
+            // Send both original and edited meals to the API
+            fetch(`http://localhost:3000/api/editMeal?username=${this.username}`, {
                 method: 'PUT', // Use PUT to update an existing record
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(editedMeal),
+                body: JSON.stringify(mealsData), // Send both original and edited meals
             })
             .then(response => response.json())
             .then(data => {
@@ -105,12 +120,17 @@ export default {
                         query: { username: this.username, isCoach: this.isCoach, coach: this.coach }
                     });
                 }
+            })
+            .catch(error => {
+                console.error("Error updating meal:", error);
+                alert('An error occurred while updating the meal.');
             });
-            */
         }
+
     }
 }
 </script>
+
 <style scoped>
 .editMeal-container {
   padding: 20px;
@@ -123,8 +143,8 @@ export default {
 }
 
 .header-message {
-    font-size: 2em;
-    color: #0b6dff;
+  font-size: 2em;
+  color: #0b6dff;
 }
 
 label {
@@ -144,10 +164,85 @@ select {
 }
 
 button {
+  all: unset;
   cursor: pointer;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: #0b6dff;
+  color: white;
+  margin: 10px 5px;
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
 button:hover {
+  background-color: #0854cc;
+  transform: translateY(-2px);
+}
+
+button:focus {
+  outline: none; /* Remove focus outline */
+}
+
+.date-navigation {
+  margin: 20px 0;
+}
+
+.date-navigation button {
+  margin: 0 10px;
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.meal-stats {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  position: relative;
+}
+
+.meal-item {
+  position: relative;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.menu-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.menu-icon {
+  cursor: pointer;
+  font-size: 20px;
+  padding: 5px;
+  color: #555;
+}
+
+.menu-icon:hover {
+  color: #0b6dff;
+}
+
+.edit-button {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  border: 2px solid black;
+  background-color: #0b6dff;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.edit-button:hover {
   background-color: #0854cc;
 }
 </style>

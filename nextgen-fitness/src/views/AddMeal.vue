@@ -110,41 +110,68 @@
   }
   </script>
   
-  <style scoped>
-  .addMeal-container {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
-    text-align: center;
-    max-width: 400px;
-    margin: auto;
-  }
+<style scoped>
+.addMeal-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  text-align: center;
+  max-width: 400px;
+  margin: auto;
+}
 
-  .header-message {
-    font-size: 2em;
-    color: #0b6dff;
-  }
-  
-  label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
-  }
-  
-  input, textarea {
-    width: 100%;
-    padding: 8px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
+.header-message {
+  font-size: 2em;
+  color: #0b6dff;
+  margin-bottom: 20px;
+}
 
-  button{
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0854cc;
-  }
-  </style>  
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #fff;
+}
+
+button {
+  all: unset;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: #0b6dff;
+  color: white;
+  margin: 10px 5px;
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #0854cc;
+  transform: translateY(-2px);
+}
+
+button:focus {
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+}
+
+select {
+  cursor: pointer;
+}
+</style>  

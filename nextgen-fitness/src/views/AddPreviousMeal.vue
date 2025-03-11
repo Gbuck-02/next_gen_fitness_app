@@ -101,7 +101,6 @@ export default {
         protein: this.protein,
         comments: this.comments,
       };
-      console.log(meal);
 
       fetch(`http://localhost:3000/api/addmeal?username=${this.username}`, {
         method: 'POST',
@@ -143,8 +142,9 @@ export default {
 }
 
 .header-message {
-    font-size: 2em;
-    color: #0b6dff;
+  font-size: 2em;
+  color: #0b6dff;
+  margin-bottom: 20px;
 }
 
 label {
@@ -157,17 +157,41 @@ input,
 textarea,
 select {
   width: 100%;
-  padding: 8px;
+  padding: 10px; /* Adjusted padding for consistency */
   margin: 5px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
+  font-size: 14px; /* Consistent font size */
+  background-color: #fff; /* Ensuring input background color consistency */
 }
 
 button {
+  all: unset; /* Reset default button styles */
   cursor: pointer;
+  padding: 10px 20px; /* Consistent padding */
+  font-size: 16px; /* Consistent font size for buttons */
+  border-radius: 4px; /* Rounded corners */
+  border: 1px solid #ccc; /* Border color */
+  background-color: #0b6dff; /* Primary button color */
+  color: white; /* Text color */
+  margin: 10px 5px; /* Space between buttons */
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
 button:hover {
-  background-color: #0854cc;
+  background-color: #0854cc; /* Darker shade on hover */
+  transform: translateY(-2px); /* Slight hover effect */
+}
+
+button:focus {
+  outline: none; /* Remove focus outline */
+}
+
+textarea {
+  resize: vertical; /* Allow vertical resizing */
+}
+
+select {
+  cursor: pointer; /* Make the select dropdown more interactive */
 }
 </style>

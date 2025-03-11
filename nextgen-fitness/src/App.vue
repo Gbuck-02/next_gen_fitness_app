@@ -1,59 +1,38 @@
 <template>
   <div id="app">
-    <Navbar :isCoach="isCoach" v-if="showNavbar" />
-    <router-view />
+    <header class="app-header">
+      <img :src="logo" alt="Logo" class="logo" />
+    </header>
+    <router-view /> <!-- Content from routed pages -->
   </div>
 </template>
 
 <script>
-import Navbar from './components/Navbar.vue';
-
 export default {
-  name: 'App',
-  components: {
-  },
   data() {
     return {
-      isCoach: this.$route.query.isCoach === 'true',
-      showNavbar: true
+      logo: require('@/components/NextGenLogo.webp'), // Path to your logo
     };
   },
-  methods: {
-  }
 };
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-
+  background-color: #f9f9f9;
 }
 
-nav {
-  padding: 30px;
+/* Header styling */
+.app-header {
+  padding: 10px 10px; /* Reduced padding to make the header smaller */
+  margin-bottom: -10px; /* Reduced margin to avoid pushing the content too far */
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-  text-decoration: none;
-  padding: 10px;
-  border-radius: 4px;
-}
-
-nav a.router-link-exact-active {
-  color: white;
-  background: crimson;
-}
-
-button {
-  margin: 0 10px;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
+/* Adjust the logo size */
+.logo {
+  width: 150px;  /* Set a smaller width for the logo */
+  height: auto;  /* Maintain aspect ratio */
 }
 </style>

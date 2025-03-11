@@ -15,11 +15,13 @@ const newuserRoutes = require('./routes/newuserRoutes');
 const getstatsRoutes = require('./routes/getstatsRoutes');
 const addmealRoutes = require('./routes/addmealRoutes');
 const getMealsRoutes = require('./routes/getmealsRoutes'); // Import your new routes
+const editmealRoutes = require('./routes/editmealRoutes'); // Adjust path if needed
 app.use('/api', loginRoutes);
 app.use('/api', newuserRoutes);
 app.use('/api', getstatsRoutes);
 app.use('/api', addmealRoutes);
 app.use('/api', getMealsRoutes); // Use the routes under the /api path
+app.use('/api', editmealRoutes); // Register the routes under /api
 
 //fire up server
 const port = 3000;
