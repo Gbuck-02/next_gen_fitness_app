@@ -66,7 +66,12 @@ const routes = [
   {
     path: '/clients',
     name: 'clients',
-    component: Clients
+    component: Clients,
+    props: route => ({
+      username: route.params.username,
+      isCoach: route.params.isCoach,
+      coach: route.params.coach
+    })
   },
   // redirect
   {
