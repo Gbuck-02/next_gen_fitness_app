@@ -17,6 +17,7 @@ const addmealRoutes = require('./routes/addmealRoutes');
 const getMealsRoutes = require('./routes/getmealsRoutes');
 const editmealRoutes = require('./routes/editmealRoutes');
 const getclientsRoutes = require('./routes/getclientsRoutes');
+const getinvitesRoutes = require('./routes/getinvitesRoutes');
 
 app.use('/api', loginRoutes);
 app.use('/api', newuserRoutes);
@@ -24,7 +25,8 @@ app.use('/api', getstatsRoutes);
 app.use('/api', addmealRoutes);
 app.use('/api', getMealsRoutes);
 app.use('/api', editmealRoutes);
-app.use('/api', getclientsRoutes)
+app.use('/api', getclientsRoutes);
+app.use('/api', getinvitesRoutes);
 
 //fire up server
 const port = 3000;

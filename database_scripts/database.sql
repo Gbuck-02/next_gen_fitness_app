@@ -22,6 +22,16 @@ CREATE TABLE meal_statistics (
   FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
 );
 
+CREATE TABLE coach_invites (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    coach VARCHAR(255),
+    username VARCHAR(255) UNIQUE NOT NULL
+);
+
+INSERT INTO coach_invites (coach, username) VALUES ('Marcus', 'alfred');
+
+SELECT * FROM coach_invites;
+
 INSERT INTO clients(username, pass, isCoach, coach) VALUES ('Marcus','1234', TRUE, ''), ('Anna', '5678', FALSE, 'Marcus');
 
 INSERT INTO meal_statistics(client_id, meal_date, meal_time, food, calories, fat, carbs, protein, comments) VALUES 

@@ -1,5 +1,5 @@
 const express = require('express');
-const { getMealStats } = require('../controllers/getmealsController'); // Import controller
+const { getMealStats } = require('../controllers/getmealsController.js'); // Import controller
 
 const router = express.Router();
 

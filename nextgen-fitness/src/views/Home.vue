@@ -7,7 +7,7 @@
     <!-- Display clients page button if the user is a coach -->
     <div v-if="isCoach === 'true'">
       <router-link :to="{ name: 'clients', query: { username: this.username, isCoach: this.isCoach, coach: this.coach } }">
-        <button>Go to Clients Page</button>
+        <button>Clients</button>
       </router-link>
     </div>
 
