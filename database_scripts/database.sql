@@ -28,8 +28,6 @@ CREATE TABLE coach_invites (
     username VARCHAR(255) UNIQUE NOT NULL
 );
 
-INSERT INTO coach_invites (coach, username) VALUES ('Marcus', 'alfred');
-
 SELECT * FROM coach_invites;
 
 INSERT INTO clients(username, pass, isCoach, coach) VALUES ('Marcus','1234', TRUE, ''), ('Anna', '5678', FALSE, 'Marcus');
@@ -44,10 +42,10 @@ SELECT DATE_FORMAT(meal_date, '%W, %M %d, %Y') AS formatted_date,
        food, calories, fat, carbs, protein, comments
 FROM meal_statistics WHERE client_id = 1;
 
+ALTER TABLE clients ADD COLUMN coach_code VARCHAR(10) UNIQUE;
+
+UPDATE clients SET coach_code = 'C-36528' WHERE username = 'Marcus';
+
 SELECT * FROM clients;
 
 SELECT * FROM meal_statistics;
-
-DROP TABLE clients;
-
-DROP TABLE meal_statistics;

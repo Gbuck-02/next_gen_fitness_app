@@ -4,6 +4,8 @@
 
     <button @click="addMeal">Add Meal</button>
 
+    <button v-if="isCoach !== 'true' && coach === null" @click="addCoach">Add a Coach</button>
+
     <!-- Display clients page button if the user is a coach -->
     <div v-if="isCoach === 'true'">
       <router-link :to="{ name: 'clients', query: { username: this.username, isCoach: this.isCoach, coach: this.coach } }">
@@ -89,6 +91,16 @@ export default {
     addMeal() {
       this.$router.push({
         name: 'addmeal',
+          query: {
+            username: this.username,
+            isCoach: this.isCoach,
+            coach: this.coach
+          }
+      });
+    },
+    addCoach() {
+      this.$router.push({
+        name: 'addcoach',
           query: {
             username: this.username,
             isCoach: this.isCoach,

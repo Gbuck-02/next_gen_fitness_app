@@ -7,6 +7,7 @@ import NewUser from '../views/NewUser.vue';
 import AddMeal from '../views/AddMeal.vue';
 import AddPreviousMeal from '../views/AddPreviousMeal.vue';
 import EditMeal from '../views/EditMeal.vue';
+import AddCoach from '../views/AddCoach.vue';
 
 const routes = [
   {
@@ -73,10 +74,15 @@ const routes = [
       coach: route.params.coach
     })
   },
-  // redirect
   {
-    path: '/all-jobs',
-    redirect: '/jobs'
+    path: '/addcoach',
+    name: 'addcoach',
+    component: AddCoach,
+    props: route => ({
+      username: route.params.username,
+      isCoach: route.params.isCoach,
+      coach: route.params.coach
+    })
   },
   // catch all 404
   {

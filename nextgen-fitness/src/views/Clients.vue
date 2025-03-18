@@ -66,7 +66,7 @@ export default {
         if (data.error) {
           console.error('Error fetching clients:', data.error);
         } else {
-          this.clients = data.clients; // Assuming the response contains an array of clients
+          this.clients = data.clients || []; // Ensure clients is always an array
         }
       } catch (error) {
         console.error('Error:', error);
@@ -87,21 +87,69 @@ export default {
         if (data.error) {
           console.error('Error fetching invites:', data.error);
         } else {
-          this.invites = data.invites;  // Populate the invites list
+          this.invites = data.invites || [];  // Default to an empty array if no invites
           this.showPopup = true;  // Show the popup
         }
       } catch (error) {
         console.error('Error:', error);
       }
     },
-    acceptInvite(username) {
-      console.log(`Accepted invite from: ${username}`);
-      // Handle the logic for accepting the invite here
+    // Inside your Vue component methods
+    async acceptInvite(username) {
+      try {
+        const response = await fetch('http://localhost:3000/api/accept-invite', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: username,
+            coach: this.username,
+          }),
+        });
+
+        const data = await response.json();
+        
+        if (data.message) {
+          // Handle successful invite acceptance
+          console.log(data.message);
+          this.fetchInvites();  // Refresh invites
+          this.fetchClients();
+        } else {
+          console.error(data.error);
+        }
+      } catch (error) {
+        console.error('Error accepting invite:', error);
+      }
     },
-    declineInvite(username) {
-      console.log(`Declined invite from: ${username}`);
-      // Handle the logic for declining the invite here
+
+    async declineInvite(username) {
+      try {
+        const response = await fetch('http://localhost:3000/api/decline-invite', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: username,
+            coach: this.username,
+          }),
+        });
+
+        const data = await response.json();
+        
+        if (data.message) {
+          // Handle successful invite decline
+          console.log(data.message);
+          this.fetchInvites();  // Refresh invites
+        } else {
+          console.error(data.error);
+        }
+      } catch (error) {
+        console.error('Error declining invite:', error);
+      }
     },
+
     closePopup() {
       this.showPopup = false;  // Close the popup
     },
