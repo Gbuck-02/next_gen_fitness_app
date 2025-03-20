@@ -73,7 +73,14 @@ export default {
       }
     },
     handleClientClick(clientName) {
-      console.log(`Selected client: ${clientName}`);
+      this.$router.push({
+        name: 'clientstats',
+        query: {
+          username: clientName,
+          isCoach: this.isCoach,
+          coach: this.username
+        }
+      });
       // Handle client selection logic here
     },
     viewInvites() {
