@@ -9,6 +9,7 @@ import AddPreviousMeal from '../views/AddPreviousMeal.vue';
 import EditMeal from '../views/EditMeal.vue';
 import AddCoach from '../views/AddCoach.vue';
 import ClientStats from '../views/ClientStats.vue';
+import ClientEdit from '../views/ClientEdit.vue';
 
 const routes = [
   {
@@ -89,6 +90,16 @@ const routes = [
     path: '/clientstats',
     name: 'clientstats',
     component: ClientStats,
+    props: route => ({
+      username: route.params.username,
+      isCoach: route.params.isCoach,
+      coach: route.params.coach
+    })
+  },
+  {
+    path: '/editmealclient',
+    name: 'editmealclient',
+    component: ClientEdit,
     props: route => ({
       username: route.params.username,
       isCoach: route.params.isCoach,

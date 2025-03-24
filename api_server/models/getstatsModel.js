@@ -18,8 +18,8 @@ const getClientIdByUsername = (username, callback) => {
 const getMealStatsByDate = (clientId, date, callback) => {
   const query = `SELECT 
                     DATE_FORMAT(meal_date, '%W, %M %d, %Y') AS formatted_date,
-                    DATE_FORMAT(meal_time, '%l:%i %p') AS formatted_time, 
-                    food, calories, fat, carbs, protein, comments
+                    DATE_FORMAT(meal_time, '%l:%i %p') AS formatted_time,
+                    food, calories, fat, carbs, protein, comments, coach_comment
                  FROM meal_statistics 
                  WHERE client_id = ? AND DATE(meal_date) = ?`;
 

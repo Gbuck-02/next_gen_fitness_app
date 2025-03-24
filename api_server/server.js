@@ -21,6 +21,7 @@ const getinvitesRoutes = require('./routes/getinvitesRoutes');
 const coachreqRoutes = require('./routes/coachreqRoutes');
 const acceptreqRoutes = require('./routes/acceptreqRoutes');
 const decreqRoutes = require('./routes/decreqRoutes');
+const editmealclientRoutes = require('./routes/editmealclientRoutes');
 
 app.use('/api', loginRoutes);
 app.use('/api', newuserRoutes);
@@ -33,6 +34,7 @@ app.use('/api', getinvitesRoutes);
 app.use('/api', coachreqRoutes);
 app.use('/api', acceptreqRoutes);
 app.use('/api', decreqRoutes);
+app.use('/api', editmealclientRoutes);
 
 //fire up server
 const port = 3000;

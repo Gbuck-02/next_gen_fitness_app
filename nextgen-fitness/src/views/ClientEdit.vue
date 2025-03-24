@@ -3,8 +3,16 @@
       <button @click="redirect">Log Out</button>
   
       <button @click="home">Home</button>
+
+      <button @click="stats">{{ username }}'s Meal Entries</button>
+
+      <div v-if="isCoach === 'true'">
+        <router-link :to="{ name: 'clients', query: { username: this.coach, isCoach: this.isCoach, coach: this.homeCoach } }">
+          <button>Clients</button>
+        </router-link>
+      </div>
   
-      <h1 class="header-message">Edit Meal</h1>
+      <h1 class="header-message">Edit {{ username }}'s Meal Entry</h1>
   
       <label for="food">Food:</label>
       <input id="food" v-model="food" />
@@ -20,10 +28,11 @@
   
       <label for="protein">Protein (g):</label>
       <input type="number" id="protein" v-model="protein" placeholder="Enter protein (g)" min="0" @input="protein = protein < 0 ? '' : protein" />
-  
-      <label for="comments">Comments:</label>
-      <textarea id="comments" v-model="comments" placeholder="Additional notes"></textarea>
-  
+      
+      <!-- Coach Comments (Only show if a coach exists) -->
+      <label for="coach_comments" v-if="coach">Coach Comments:</label>
+      <textarea id="coach_comments" v-model="coach_comments" v-if="coach"></textarea>
+
       <button @click="editMeal">Submit</button>
     </div>
 </template>
@@ -34,13 +43,14 @@ export default {
             username: this.$route.query.username,
             isCoach: this.$route.query.isCoach,
             coach: this.$route.query.coach || null,
+            homeCoach: null,
             date: this.$route.query.date,
             meal: this.$route.query.meal ? this.decodeBase64(this.$route.query.meal) : null,
             calories: '',
             fat: '',
             carbs: '',
             protein: '',
-            comments: '',
+            coach_comments: '',
             food: '',
             originalMeal: null
         };
@@ -54,7 +64,7 @@ export default {
             this.fat = mealObject.fat || '';
             this.carbs = mealObject.carbs || '';
             this.protein = mealObject.protein || '';
-            this.comments = mealObject.comments || '';
+            this.coach_comments = mealObject.coach_comments || '';
             this.food = mealObject.food;
 
             this.originalMeal = {
@@ -63,7 +73,7 @@ export default {
                 fat: this.fat,
                 carbs: this.carbs,
                 protein: this.protein,
-                comments: this.comments,
+                coach_comments: this.coach_comments,
                 date: this.date,
             };
 
@@ -72,20 +82,32 @@ export default {
     },
     methods: {
         redirect() {
-            this.$router.push({ name: 'login' });
+          this.$router.push({ name: 'login' });
         },
         home() {
-            this.$router.push({
-                name: 'home',
-                query: {
-                    username: this.username,
-                    isCoach: this.isCoach,
-                    coach: this.coach
-                }
+          this.isCoach = true;
+          this.$router.push({
+              name: 'home',
+              query: {
+                username: this.coach,
+                isCoach: this.isCoach,
+                coach: this.homeCoach
+              }
+            });
+        },
+
+        stats(){
+          this.$router.push({
+              name: 'clientstats',
+              query: {
+                username: this.username,
+                isCoach: this.isCoach,
+                coach: this.coach
+              }
             });
         },
         decodeBase64(encodedData) {
-            return JSON.parse(decodeURIComponent(atob(encodedData)));
+          return JSON.parse(decodeURIComponent(atob(encodedData)));
         },
         editMeal() {
             const editedMeal = {
@@ -94,7 +116,7 @@ export default {
                 fat: this.fat,
                 carbs: this.carbs,
                 protein: this.protein,
-                comments: this.comments,
+                coach_comments: this.coach_comments,
                 date: this.date,
             };
 
@@ -104,7 +126,7 @@ export default {
             };
 
             // Send both original and edited meals to the API
-            fetch(`http://localhost:3000/api/editMeal?username=${this.username}`, {
+            fetch(`http://localhost:3000/api/editMealClient?username=${this.username}`, {
                 method: 'PUT', // Use PUT to update an existing record
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(mealsData), // Send both original and edited meals
@@ -116,8 +138,12 @@ export default {
                 } else {
                     alert('Meal updated successfully!');
                     this.$router.push({
-                        name: 'home',
-                        query: { username: this.username, isCoach: this.isCoach, coach: this.coach }
+                      name: 'clientstats',
+                      query: {
+                        username: this.username,
+                        isCoach: this.isCoach,
+                        coach: this.coach
+                      }
                     });
                 }
             })
@@ -140,6 +166,10 @@ export default {
   text-align: center;
   max-width: 400px;
   margin: auto;
+  border: 5px solid #0b6dff; /* Blue border around the container */
+  border-radius: 10px; /* Rounded corners for the border */
+  margin: 20px auto; /* Center the container with some margin */
+  max-width: 900px; /* Optional: Limit the container width */
 }
 
 .header-message {
@@ -164,26 +194,25 @@ select {
 }
 
 button {
-  all: unset;
-  cursor: pointer;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  background-color: #0b6dff;
-  color: white;
-  margin: 10px 5px;
-  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
-}
-
-button:hover {
-  background-color: #0854cc;
-  transform: translateY(-2px);
-}
-
-button:focus {
-  outline: none; /* Remove focus outline */
-}
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #0b6dff;
+    color: white;
+    margin: 10px 5px;
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  }
+  
+  button:hover {
+    background-color: #0854cc;
+    transform: translateY(-2px);
+  }
+  
+  button:focus {
+    outline: none;
+  }
 
 .date-navigation {
   margin: 20px 0;

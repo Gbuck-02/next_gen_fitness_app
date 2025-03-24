@@ -29,6 +29,8 @@
             <p><strong>{{ meal.formatted_time }}</strong> - {{ meal.food }}</p>
             <p>Calories: {{ meal.calories }}, Fat: {{ meal.fat }}, Carbs: {{ meal.carbs }}, Protein: {{ meal.protein }}</p>
             <p>Comments: {{ meal.comments }}</p>
+            <!-- Only show coach_comments if coach has a value -->
+            <p v-if="coach">Coach Comments: {{ meal.coach_comment || ''}}</p>
           </div>
           
           <!-- Three-Dot Menu Icon -->
@@ -116,7 +118,7 @@
       editMeal(meal) {
         const encodedMeal = this.encodeBase64(JSON.stringify(meal));
         this.$router.push({
-          name: 'editmeal',
+          name: 'editmealclient',
           query: {
             username: this.username,
             isCoach: this.isCoach,
@@ -131,7 +133,6 @@
       },
       home() {
       this.isCoach = true;
-      console.log(this.coach)
       this.$router.push({
         name: 'home',
         query: {

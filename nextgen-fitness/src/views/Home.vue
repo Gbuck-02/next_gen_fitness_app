@@ -34,7 +34,10 @@
         <div class="meal-content">
           <p><strong>{{ meal.formatted_time }}</strong> - {{ meal.food }}</p>
           <p>Calories: {{ meal.calories }}, Fat: {{ meal.fat }}, Carbs: {{ meal.carbs }}, Protein: {{ meal.protein }}</p>
-          <p>Comments: {{ meal.comments }}</p>
+          <p>Comments: {{ meal.comments || '' }}</p>
+
+          <!-- Only show coach_comments if coach has a value -->
+          <p v-if="coach">Coach Comments: {{ meal.coach_comment || '' }}</p>
         </div>
         
         <!-- Three-Dot Menu Icon -->
@@ -50,6 +53,8 @@
         <hr />
       </div>
     </div>
+
+
     <div v-else>
       <p>No meal statistics found for this date.</p>
     </div>
