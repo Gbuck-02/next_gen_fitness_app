@@ -28,6 +28,8 @@ CREATE TABLE coach_invites (
     username VARCHAR(255) UNIQUE NOT NULL
 );
 
+ALTER TABLE meal_statistics ADD COLUMN coach_comment VARCHAR(255);
+
 SELECT * FROM coach_invites;
 
 INSERT INTO clients(username, pass, isCoach, coach) VALUES ('Marcus','1234', TRUE, ''), ('Anna', '5678', FALSE, 'Marcus');
