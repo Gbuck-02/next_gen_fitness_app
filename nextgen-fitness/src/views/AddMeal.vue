@@ -79,7 +79,6 @@
         protein: this.protein,
         comments: this.comments
       };
-        console.log(meal)
 
         fetch(`http://localhost:3000/api/addmeal?username=${this.username}`, {
             method: 'POST',

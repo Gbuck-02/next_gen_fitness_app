@@ -67,13 +67,13 @@ export default {
       });
     },
     fetchFoodOptions() {
-      fetch(`http://localhost:3000/api/getMeals?username=${this.username}`)  // Adjust this URL to your new endpoint
+      fetch(`http://localhost:3000/api/getMeals?username=${this.username}`)
         .then(response => response.json())
         .then(data => {
           if (data.error) {
             alert(data.error);
           } else {
-            this.foodOptions = data;  // Assuming the response contains an array of food items
+            this.foodOptions = data;
           }
         })
         .catch(error => console.error('Error fetching food options:', error));
@@ -93,6 +93,11 @@ export default {
       }
     },
     submitData() {
+      if (!this.selectedFood || !this.selectedFood.food || this.selectedFood.food.trim() === '') {
+        alert("Must enter a food eaten!");
+        return; // Stop function execution if food is empty
+      }
+
       const meal = {
         food: this.selectedFood.food,
         calories: this.calories,
@@ -126,6 +131,7 @@ export default {
         }
       });
     }
+
   }
 }
 </script>

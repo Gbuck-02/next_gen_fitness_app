@@ -15,7 +15,7 @@ const newUser = (req, res) => {
     addUser(username, hashedPassword, isCoach, (err, result) => {
       if (err) {
         console.error("Database insert error:", err);
-        return res.status(500).json({ error: 'Failed to create user' });
+        return res.status(500).json({ error: 'Username already taken!' });
       }
 
       // If insertion is successful, return the user data back to the frontend

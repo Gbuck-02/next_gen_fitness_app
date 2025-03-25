@@ -10,7 +10,7 @@ const loginUser = (req, res) => {
       return res.status(500).json({ error: 'Server error' });
     }
     if (!user) { 
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Invalid credentials' });
     }
 
     // special handling for Marcus and Anna with plaintext passwords

@@ -11,6 +11,8 @@
           <button>Clients</button>
         </router-link>
       </div>
+
+      <div class="coach-view">
   
       <h1 class="header-message">Edit {{ username }}'s Meal Entry</h1>
   
@@ -35,6 +37,7 @@
 
       <button @click="editMeal">Submit</button>
     </div>
+  </div>
 </template>
 <script>
 export default {
@@ -164,12 +167,8 @@ export default {
   background-color: #f9f9f9;
   color: #333;
   text-align: center;
-  max-width: 400px;
+  max-width: 70%;
   margin: auto;
-  border: 5px solid #0b6dff; /* Blue border around the container */
-  border-radius: 10px; /* Rounded corners for the border */
-  margin: 20px auto; /* Center the container with some margin */
-  max-width: 900px; /* Optional: Limit the container width */
 }
 
 .header-message {
@@ -186,7 +185,7 @@ label {
 input,
 textarea,
 select {
-  width: 100%;
+  width: 90%;
   padding: 8px;
   margin: 5px 0;
   border: 1px solid #ccc;
@@ -273,5 +272,12 @@ button {
 
 .edit-button:hover {
   background-color: #0854cc;
+}
+
+.coach-view{
+    border: 5px solid #0b6dff; /* Blue border around the container */
+    border-radius: 10px; /* Rounded corners for the border */
+    margin: 20px auto; /* Center the container with some margin */
+    max-width: 1500px
 }
 </style>

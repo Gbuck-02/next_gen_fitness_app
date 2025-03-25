@@ -49,7 +49,6 @@ export default {
           if (data.error) {
             alert(data.error);
           } else {
-            console.log('User created:', data.message);
             this.$router.push({
               name: 'home',
               query: {

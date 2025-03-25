@@ -12,7 +12,8 @@
           <button>Clients</button>
         </router-link>
       </div>
-  
+      
+      <div class="coach-view">
       <h1 class="welcome-message">Currently viewing {{ username }}'s stats</h1>
   
       <!-- Date navigation -->
@@ -49,6 +50,7 @@
       <div v-else>
         <p>No meal statistics found for this date.</p>
       </div>
+    </div>
     </div>
   </template>
   
@@ -163,10 +165,6 @@
   background-color: #f9f9f9;
   color: #333;
   text-align: center;
-  border: 5px solid #0b6dff; /* Blue border around the container */
-  border-radius: 10px; /* Rounded corners for the border */
-  margin: 20px auto; /* Center the container with some margin */
-  max-width: 900px; /* Optional: Limit the container width */
 }
 
   
@@ -261,4 +259,12 @@
   .edit-button:hover {
     background-color: #0854cc;
   }
+
+  .coach-view{
+    border: 5px solid #0b6dff; /* Blue border around the container */
+    border-radius: 10px; /* Rounded corners for the border */
+    margin: 20px auto; /* Center the container with some margin */
+    max-width: 900px; /* Optional: Limit the container width */
+  }
+
   </style>
