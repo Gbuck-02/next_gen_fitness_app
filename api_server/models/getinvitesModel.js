@@ -1,16 +1,15 @@
-const db = require('../db');  // Import the database connection
+const db = require('../db'); //connect to db config file for credentials
 
-// Function to fetch invites for a specific coach using the callback approach
+//function to fetch invites for a specific coach
 const getinvitesByCoach = (coachUsername, callback) => {
-  const query = 'SELECT username FROM coach_invites WHERE coach = ?';  // Query to fetch usernames where the coach is equal to the current user
+  const query = 'SELECT username FROM coach_invites WHERE coach = ?';
 
   db.query(query, [coachUsername], (err, results) => {
     if (err) {
-      return callback(err, null);  // Pass error to callback if it occurs
+      return callback(err, null);
     }
-
-    const invites = results.map(result => result.username);  // Map results to an array of usernames
-    callback(null, invites);  // Pass the invites to the callback
+    const invites = results.map(result => result.username);  //map results to an array of usernames
+    callback(null, invites);  // return the list of invites
   });
 };
 

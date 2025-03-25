@@ -1,6 +1,6 @@
-const db = require('../db'); // Import the database connection
+const db = require('../db'); //connect to db config file for credentials
 
-// Function to get client ID by username
+//function to get client ID by username, verify they are in database
 const getClientIdByUsername = (username, callback) => {
   const query = `
     SELECT id FROM clients WHERE username = ?
@@ -13,13 +13,12 @@ const getClientIdByUsername = (username, callback) => {
     if (results.length === 0) {
       return callback({ error: 'Client not found' }, null);
     }
-    callback(null, results[0].id); // Return the client ID
+    callback(null, results[0].id); //return the client ID
   });
 };
 
-// Function to update the meal in the database
+//function to update the meal in the database
 const updateMealInDatabase = (originalMeal, editedMeal, username, callback) => {
-  // Get client ID based on username
   getClientIdByUsername(username, (err, clientId) => {
     if (err) {
       return callback(err, null);

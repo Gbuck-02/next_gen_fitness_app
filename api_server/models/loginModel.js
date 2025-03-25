@@ -1,6 +1,6 @@
-const db = require('../db'); //import the shared db connection
+const db = require('../db'); //connect to db config file for credentials
 
-//gets a user by username
+//gets a username, password, thier coach status, and thier coach from the database
 const getUserByUsername = (username, callback) => {
   const query = 'SELECT username, pass, isCoach, coach FROM clients WHERE username = ?';
   db.query(query, [username], (err, results) => {
@@ -8,9 +8,9 @@ const getUserByUsername = (username, callback) => {
       return callback(err);
     }
     if (results.length === 0) {
-      return callback(null, null); // user not in db
+      return callback(null, null);
     }
-    callback(null, results[0]); // return first matching user
+    callback(null, results[0]); //returns username, password, thier coach status, and thier coach
   });
 };
 

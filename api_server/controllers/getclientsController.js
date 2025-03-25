@@ -1,19 +1,20 @@
-const { getclientsByCoach } = require('../models/getclientsModel'); // Import the model
+const { getclientsByCoach } = require('../models/getclientsModel');
 
+//controller for getting the list of clients
 const getclientsController = (req, res) => {
-  const { coach } = req.query;  // Extract the coach username from query parameters
+  const { coach } = req.query;
 
   if (!coach) {
-    return res.status(400).json({ error: 'Coach username is required' });  // Return error if no coach username is provided
+    return res.status(400).json({ error: 'Coach username is required' });
   }
 
-  // Use the model function to fetch clients for the specified coach
+  //retrieve clients for the specified coach from the database
   getclientsByCoach(coach, (err, clients) => {
     if (err) {
-      return res.status(500).json(err);  // Return the error in the response if any issue occurs
+      return res.status(500).json(err);
     }
 
-    // Return the list of clients in the response
+    //return list of clients
     res.status(200).json({ clients });
   });
 };

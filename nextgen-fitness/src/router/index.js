@@ -11,6 +11,7 @@ import AddCoach from '../views/AddCoach.vue';
 import ClientStats from '../views/ClientStats.vue';
 import ClientEdit from '../views/ClientEdit.vue';
 
+//maps out how the user will navigate through the various pages
 const routes = [
   {
     path: '/',
@@ -28,7 +29,7 @@ const routes = [
     path: '/home',
     name: 'home',
     component: Home,
-    props: route => ({ //this allows you to pass objects from route params
+    props: route => ({
       username: route.params.username,
       isCoach: route.params.isCoach,
       coach: route.params.coach

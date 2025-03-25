@@ -1,9 +1,8 @@
 const express = require('express');
-const { loginUser } = require('../controllers/loginController'); // import controller
-
 const router = express.Router();
+const { loginUser } = require('../controllers/loginController');
 
-// define the login route
+//API route for validating user credentials
 router.post('/login', loginUser);
 
 module.exports = router;

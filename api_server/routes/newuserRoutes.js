@@ -1,9 +1,8 @@
 const express = require('express');
-const { newUser } = require('../controllers/newuseController'); // import controller
-
 const router = express.Router();
+const { newUser } = require('../controllers/newuseController');
 
-// Define the new user route
+//API route for creating a new user
 router.post('/newuser', newUser);
 
 module.exports = router;

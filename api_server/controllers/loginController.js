@@ -1,10 +1,11 @@
-const bcrypt = require('bcrypt'); //npm install to hash passwords
-const { getUserByUsername } = require('../models/loginModel'); // import model
+const bcrypt = require('bcrypt'); //used to encrypt passwords
+const { getUserByUsername } = require('../models/loginModel');
 
+//controller for validating log in credentials
 const loginUser = (req, res) => {
   const { username, password } = req.body;
 
-  // get user from database by username
+  //first checks if the username is in the database
   getUserByUsername(username, (err, user) => {
     if (err) {
       return res.status(500).json({ error: 'Server error' });
@@ -13,7 +14,8 @@ const loginUser = (req, res) => {
       return res.status(404).json({ error: 'Invalid credentials' });
     }
 
-    // special handling for Marcus and Anna with plaintext passwords
+    //then checks for passwords that match the username
+    //special handling for Marcus and Anna with plaintext passwords (they are used for examples)
     if (username === 'Marcus' || username === 'Anna') {
       if (user.pass === password) {
         return res.json({
@@ -26,13 +28,12 @@ const loginUser = (req, res) => {
       }
     }
 
-    // use bcrypt to compare passwords
+    //use bcrypt to compare passwords
     bcrypt.compare(password, user.pass, (err, isMatch) => {
       if (err) {
         return res.status(500).json({ error: 'Server error' });
       }
       if (isMatch) {
-        // return user data for frontend
         return res.json({
           username: user.username,
           isCoach: Boolean(user.isCoach),

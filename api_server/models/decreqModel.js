@@ -1,6 +1,6 @@
-const db = require('../db');  // Assuming you have a `db.js` for managing database connections
+const db = require('../db'); //connect to db config file for credentials
 
-// Decline an invite by deleting the invite entry from the database
+//decline an invite by deleting the invite entry from the database
 const declineInvite = (username, coach, callback) => {
   const query = `DELETE FROM coach_invites WHERE username = ? AND coach = ?`;
   
@@ -8,7 +8,7 @@ const declineInvite = (username, coach, callback) => {
     if (err) {
       return callback(err, null);
     }
-    callback(null, result);  // Successfully deleted the invite
+    callback(null, result);
   });
 };
 

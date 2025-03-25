@@ -1,24 +1,25 @@
-const { getinvitesByCoach } = require('../models/getinvitesModel');  // Import the model
+const { getinvitesByCoach } = require('../models/getinvitesModel');
 
+//controller for getting the current invites for a coach
 const getinvitesController = (req, res) => {
-  const { coach } = req.query;  // Extract the coach username from query parameters
+  const { coach } = req.query;
 
   if (!coach) {
-    return res.status(400).json({ error: 'Coach username is required' });  // Return error if no coach username is provided
+    return res.status(400).json({ error: 'Coach username is required' });
   }
 
-  // Use the model function to fetch invites for the specified coach
+  //fetch all invites for the specified coach
   getinvitesByCoach(coach, (err, invites) => {
     if (err) {
-      return res.status(500).json(err);  // Return the error in the response if any issue occurs
+      return res.status(500).json(err);
     }
 
-    // If no invites, return a message saying no invites found
+    //if no invites, return a message saying no invites found
     if (invites.length === 0) {
       return res.status(404).json({ message: 'No invites found for this coach' });
     }
 
-    // Return the list of invites in the response
+    //return the list of invites
     res.status(200).json({ invites });
   });
 };

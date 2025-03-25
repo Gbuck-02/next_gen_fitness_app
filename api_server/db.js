@@ -1,3 +1,4 @@
+//universal file for connecting to database (uses a .env file to store password)
 const mysql = require('mysql2');
 require('dotenv').config();
 const dbPassword = process.env.DB_PASSWORD;
@@ -19,5 +20,5 @@ db.connect((err) => {
   console.log('Connected to the database');
 });
 
-//export the connection object to be used elsewhere
+//export the connection object to be used elsewhere (all model files)
 module.exports = db;

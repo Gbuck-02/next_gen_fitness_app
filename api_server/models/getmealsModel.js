@@ -1,6 +1,6 @@
-const db = require('../db'); // Import the database connection
+const db = require('../db'); //connect to db config file for credentials
 
-// Function to get meal statistics by username
+//function to get meal statistics by username (used in the add previous meal)
 const getMealStatsByUsername = (username, callback) => {
   const query = `
     SELECT food, calories, fat, carbs, protein, comments, meal_date, meal_time
@@ -12,7 +12,7 @@ const getMealStatsByUsername = (username, callback) => {
     if (err) {
       return callback({ error: 'Error fetching meal statistics: ' + err.message }, null);
     }
-    callback(null, results); // Return the meal statistics
+    callback(null, results); //return the meal statistics
   });
 };
 

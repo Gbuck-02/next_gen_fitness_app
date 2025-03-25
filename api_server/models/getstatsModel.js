@@ -1,4 +1,4 @@
-const db = require('../db'); //import the db connection
+const db = require('../db'); //connect to db config file for credentials
 
 //function to get user ID by username
 const getClientIdByUsername = (username, callback) => {
@@ -8,13 +8,13 @@ const getClientIdByUsername = (username, callback) => {
       return callback('Error fetching user ID: ' + err.message);
     }
     if (results.length === 0) {
-      return callback(null, null); //user not found
+      return callback(null, null);
     }
-    callback(null, results[0]); //return first matching user
+    callback(null, results[0]);
   });
 };
 
-//function to get meal stats by client ID and date
+//function to get meal stats by client ID and date (used in home menu)
 const getMealStatsByDate = (clientId, date, callback) => {
   const query = `SELECT 
                     DATE_FORMAT(meal_date, '%W, %M %d, %Y') AS formatted_date,
@@ -28,7 +28,7 @@ const getMealStatsByDate = (clientId, date, callback) => {
       return callback('Error fetching meal stats: ' + err.message);
     }
     if (!rows || rows.length === 0) {
-      return callback(null, []); //no stats found
+      return callback(null, []);
     }
     callback(null, rows); //return meal stats
   });

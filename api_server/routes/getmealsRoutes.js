@@ -1,9 +1,8 @@
 const express = require('express');
-const { getMealStats } = require('../controllers/getmealsController.js'); // Import controller
-
 const router = express.Router();
+const { getMealStats } = require('../controllers/getmealsController.js');
 
-// Define route to get meal statistics based on username
+//API route to get meal statistics based on username (used in adding a previous meal)
 router.get('/getMeals', getMealStats);
 
 module.exports = router;

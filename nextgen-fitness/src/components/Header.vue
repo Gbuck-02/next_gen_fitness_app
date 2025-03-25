@@ -1,3 +1,4 @@
+<!-- header component that is used at the top of each page -->
 <template>
     <header class="app-header">
       <img :src="logo" alt="Logo" class="logo" />
@@ -8,7 +9,7 @@
   export default {
     data() {
       return {
-        logo: require('@/components/NextGenLogo.webp'),  // Make sure to replace with your actual logo path
+        logo: require('@/components/NextGenLogo.webp'),
       };
     },
   };

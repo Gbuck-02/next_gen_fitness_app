@@ -1,11 +1,11 @@
-const { updateMealInDatabase } = require('../models/editmealclientModel'); // Import the model
+const { updateMealInDatabase } = require('../models/editmealclientModel');
 
-// Controller function to handle editing meals
+//controller for editing a client's meals
 const editMealClient = (req, res) => {
     const { username } = req.query;
     const { originalMeal, editedMeal } = req.body;
 
-    // Call the model function to update the meal
+    //edit the meal entry in the database
     updateMealInDatabase(originalMeal, editedMeal, username, (err, results) => {
         if (err) {
             return res.status(500).json(err);

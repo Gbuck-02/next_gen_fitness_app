@@ -1,6 +1,6 @@
-const db = require('../db');
+const db = require('../db'); //connect to db config file for credentials
 
-// Get coach by their coach code
+//fetch a coach using the submitted coach code
 const getCoachByCode = (coachCode, callback) => {
   const query = 'SELECT username FROM clients WHERE coach_code = ? AND isCoach = TRUE';
   db.query(query, [coachCode], (err, results) => {
@@ -8,13 +8,13 @@ const getCoachByCode = (coachCode, callback) => {
       return callback(err, null);
     }
     if (results.length === 0) {
-      return callback(null, null); // No coach found
+      return callback(null, null);
     }
-    return callback(null, results[0].username); // Coach found, return the coach's username
+    return callback(null, results[0].username); //return the coach's username
   });
 };
 
-// Add a new invite to the coach_invites table
+//add a new invite to the coach's inbox
 const addCoachInvite = (userUsername, coachUsername, callback) => {
   const query = 'INSERT INTO coach_invites (coach, username) VALUES (?, ?)';
   db.query(query, [coachUsername, userUsername], (err, result) => {

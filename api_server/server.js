@@ -1,13 +1,9 @@
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
-const app = express();
-
-//enable CORS for all routes (network traffic security)
+app.use(bodyParser.json()); //parse incoming JSON requests from front end
+const app = express(); //enable CORS for all routes (network traffic security errors)
 app.use(cors());
-
-//parse incoming JSON requests from front end
-app.use(bodyParser.json());
 
 //various routes
 const loginRoutes = require('./routes/loginRoutes');
@@ -23,6 +19,7 @@ const acceptreqRoutes = require('./routes/acceptreqRoutes');
 const decreqRoutes = require('./routes/decreqRoutes');
 const editmealclientRoutes = require('./routes/editmealclientRoutes');
 
+//having the API use the routes
 app.use('/api', loginRoutes);
 app.use('/api', newuserRoutes);
 app.use('/api', getstatsRoutes);
@@ -36,7 +33,7 @@ app.use('/api', acceptreqRoutes);
 app.use('/api', decreqRoutes);
 app.use('/api', editmealclientRoutes);
 
-//fire up server
+//start API server
 const port = 3000;
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

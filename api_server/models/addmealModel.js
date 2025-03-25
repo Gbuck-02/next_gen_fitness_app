@@ -1,6 +1,6 @@
-const db = require('../db'); // Import the database connection
+const db = require('../db'); //connect to db config file for credentials
 
-// Function to get user ID by username
+//get user ID based on username
 const getClientIdByUsername = (username, callback) => {
   const query = 'SELECT id FROM clients WHERE username = ?';
   db.query(query, [username], (err, results) => {
@@ -8,13 +8,13 @@ const getClientIdByUsername = (username, callback) => {
       return callback({ error: 'Error fetching user ID: ' + err.message }, null);
     }
     if (results.length === 0) {
-      return callback({ error: 'User not found' }, null); // Return an error if user is not found
+      return callback({ error: 'User not found' }, null);
     }
-    callback(null, results[0].id); // Return the user ID
+    callback(null, results[0].id); //return the user ID
   });
 };
 
-// Function to add meal
+//function to add meal into database
 const addMeal = (clientId, food, calories, fat, carbs, protein, comments, callback) => {
   const query = `
     INSERT INTO meal_statistics (client_id, meal_date, meal_time, food, calories, fat, carbs, protein, comments) 
@@ -25,7 +25,7 @@ const addMeal = (clientId, food, calories, fat, carbs, protein, comments, callba
     if (err) {
       return callback({ error: 'Error inserting meal: ' + err.message }, null);
     }
-    callback(null, { success: true, mealId: result.insertId }); // Return the inserted meal ID
+    callback(null, { success: true, mealId: result.insertId }); //return the inserted meal ID
   });
 };
 

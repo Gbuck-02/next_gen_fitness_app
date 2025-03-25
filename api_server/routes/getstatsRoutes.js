@@ -1,9 +1,8 @@
 const express = require('express');
-const { getStatsForDate } = require('../controllers/getstatsController'); //import controller
-
 const router = express.Router();
+const { getStatsForDate } = require('../controllers/getstatsController');
 
-//define route to get stats based on username and date
+//API route to get stats based on username and date (used in home menu)
 router.get('/getStats', getStatsForDate);
 
 module.exports = router;
