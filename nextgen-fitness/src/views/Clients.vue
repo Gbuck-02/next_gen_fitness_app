@@ -6,6 +6,8 @@
 
     <h1 class="header-message">Clients of Coach: {{ username }}</h1>
 
+    <p class="coach-code"> Your Coach Code is: {{ coachCode }}</p>
+
     <!-- Clients List -->
     <ul class="clients-list">
       <li 
@@ -50,12 +52,14 @@ export default {
       clients: [],
       invites: [],  // Holds the fetched invites
       showPopup: false,  // Controls the visibility of the popup
+      coachCode: ""
     };
   },
   created() {
     if (this.clients.length === 0) {
       this.fetchClients();
     }
+    this.fetchCoachCode(); // Retrieve coach code on component creation
   },
   methods: {
     async fetchClients() {
@@ -70,6 +74,17 @@ export default {
         }
       } catch (error) {
         console.error('Error:', error);
+      }
+    },
+    async fetchCoachCode() {
+      try {
+        const response = await fetch(`http://localhost:3000/api/coach-code?coach=${this.username}`);
+        const data = await response.json();
+        if (data.coachCode) {
+          this.coachCode = data.coachCode;
+        }
+      } catch (error) {
+        console.error('Error fetching coach code:', error);
       }
     },
     handleClientClick(clientName) {
@@ -303,5 +318,12 @@ button:focus {
 
 .close-btn:hover {
   background-color: #0854cc;
+}
+
+.coach-code {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #0b6dff;
+  margin: 10px 0;
 }
 </style>

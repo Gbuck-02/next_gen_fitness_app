@@ -1,18 +1,29 @@
 <template>
   <div class="addMeal-container">
     <button @click="redirect">Log Out</button>
-
     <button @click="home">Home</button>
 
     <h1 class="header-message">Quick Add a Previous Meal</h1>
 
-    <label for="food">Select Meal/Food Eaten:</label>
-    <select id="food" v-model="selectedFood" @change="fillNutritionalValues">
+    <!-- First Dropdown: Unique Meal Names -->
+    <label for="food">Select Meal:</label>
+    <select id="food" v-model="selectedMealName" @change="updateMealInstances">
       <option value="null" disabled selected hidden>Select a Previous Meal</option>
-      <option v-for="foodItem in foodOptions" :key="foodItem.id" :value="foodItem">
-        {{ foodItem.food }}
+      <option v-for="meal in uniqueMealNames" :key="meal" :value="meal">
+        {{ meal }}
       </option>
     </select>
+
+    <!-- Second Dropdown: Specific Meal Instances -->
+    <div v-if="selectedMealName">
+      <label for="mealInstance">Select Meal Instance:</label>
+      <select id="mealInstance" v-model="selectedMeal" @change="fillNutritionalValues">
+        <option value="null" disabled selected hidden>Select a specific meal</option>
+        <option v-for="meal in mealInstances" :key="meal.id" :value="meal">
+          {{ meal.food }} ({{ meal.formatted_date }})
+        </option>
+      </select>
+    </div>
 
     <label for="calories">Calories:</label>
     <input type="number" id="calories" v-model="calories" placeholder="Enter calories" min="0" @input="calories = calories < 0 ? '' : calories" />
@@ -40,8 +51,11 @@ export default {
       username: this.$route.query.username,
       isCoach: this.$route.query.isCoach,
       coach: this.$route.query.coach,
-      foodOptions: [],  // To hold the food items fetched from the server
-      selectedFood: null,  // To hold the selected food item
+      foodOptions: [],  // Full list of food items from the database
+      uniqueMealNames: [],  // Unique meal names for the first dropdown
+      mealInstances: [],  // Filtered list of meals matching the selected meal name
+      selectedMealName: null,  // Meal name selected from the first dropdown
+      selectedMeal: null,  // Specific meal instance selected from the second dropdown
       calories: '',
       fat: '',
       carbs: '',
@@ -56,14 +70,14 @@ export default {
     redirect() {
       this.$router.push({ name: 'login' });
     },
-    home(){
+    home() {
       this.$router.push({
         name: 'home',
-          query: {
-            username: this.username,
-            isCoach: this.isCoach,
-            coach: this.coach
-          }
+        query: {
+          username: this.username,
+          isCoach: this.isCoach,
+          coach: this.coach
+        }
       });
     },
     fetchFoodOptions() {
@@ -74,18 +88,29 @@ export default {
             alert(data.error);
           } else {
             this.foodOptions = data;
+
+            // Extract unique meal names
+            const uniqueNames = [...new Set(data.map(meal => meal.food))];
+            this.uniqueMealNames = uniqueNames;
           }
         })
         .catch(error => console.error('Error fetching food options:', error));
     },
+    updateMealInstances() {
+      if (this.selectedMealName) {
+        // Filter the full list to get only instances of the selected meal name
+        this.mealInstances = this.foodOptions.filter(meal => meal.food === this.selectedMealName);
+        this.selectedMeal = null; // Reset selection
+      }
+    },
     fillNutritionalValues() {
-      if (this.selectedFood) {
-        this.calories = this.selectedFood.calories;
-        this.fat = this.selectedFood.fat;
-        this.carbs = this.selectedFood.carbs;
-        this.protein = this.selectedFood.protein;
+      if (this.selectedMeal) {
+        this.calories = this.selectedMeal.calories;
+        this.fat = this.selectedMeal.fat;
+        this.carbs = this.selectedMeal.carbs;
+        this.protein = this.selectedMeal.protein;
       } else {
-        // Reset values if no food is selected
+        // Reset values if no meal is selected
         this.calories = '';
         this.fat = '';
         this.carbs = '';
@@ -93,13 +118,13 @@ export default {
       }
     },
     submitData() {
-      if (!this.selectedFood || !this.selectedFood.food || this.selectedFood.food.trim() === '') {
-        alert("Must enter a food eaten!");
-        return; // Stop function execution if food is empty
+      if (!this.selectedMeal) {
+        alert("Must select a specific meal instance!");
+        return;
       }
 
       const meal = {
-        food: this.selectedFood.food,
+        food: this.selectedMeal.food,
         calories: this.calories,
         fat: this.fat,
         carbs: this.carbs,
@@ -109,9 +134,7 @@ export default {
 
       fetch(`http://localhost:3000/api/addmeal?username=${this.username}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(meal),
       })
       .then(response => response.json())
@@ -131,7 +154,6 @@ export default {
         }
       });
     }
-
   }
 }
 </script>
@@ -199,5 +221,13 @@ textarea {
 
 select {
   cursor: pointer; /* Make the select dropdown more interactive */
+}
+
+.meal-search {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 </style>

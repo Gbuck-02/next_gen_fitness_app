@@ -20,6 +20,7 @@ const coachreqRoutes = require('./routes/coachreqRoutes');
 const acceptreqRoutes = require('./routes/acceptreqRoutes');
 const decreqRoutes = require('./routes/decreqRoutes');
 const editmealclientRoutes = require('./routes/editmealclientRoutes');
+const getcoachcodeRoutes = require('./routes/getcoachcodeRoutes');
 
 // Having the API use the routes
 app.use('/api', loginRoutes);
@@ -34,6 +35,7 @@ app.use('/api', coachreqRoutes);
 app.use('/api', acceptreqRoutes);
 app.use('/api', decreqRoutes);
 app.use('/api', editmealclientRoutes);
+app.use('/api', getcoachcodeRoutes);
 
 // Start API server
 const port = 3000;
