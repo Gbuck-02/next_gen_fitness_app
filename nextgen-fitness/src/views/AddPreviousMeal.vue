@@ -9,7 +9,7 @@
     <label for="food">Select Meal:</label>
     <select id="food" v-model="selectedMealName" @change="updateMealInstances">
       <option value="null" disabled selected hidden>Select a Previous Meal</option>
-      <option v-for="meal in uniqueMealNames" :key="meal" :value="meal">
+      <option v-for="meal in sortedUniqueMealNames" :key="meal" :value="meal">
         {{ meal }}
       </option>
     </select>
@@ -65,6 +65,11 @@ export default {
   },
   created() {
     this.fetchFoodOptions();
+  },
+  computed: {
+  sortedUniqueMealNames() {
+    return this.uniqueMealNames.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+  }
   },
   methods: {
     redirect() {

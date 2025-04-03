@@ -72,7 +72,7 @@
     },
     submitData() {
       const meal = {
-        food: this.food,
+        food: this.food.charAt(0).toUpperCase() + this.food.slice(1),
         calories: this.calories,
         fat: this.fat,
         carbs: this.carbs,
