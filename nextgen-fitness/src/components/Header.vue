@@ -1,4 +1,4 @@
-<!-- header component that is used at the top of each page -->
+<!-- header component that is used at the top of each page that contains the image -->
 <template>
     <header class="app-header">
       <img :src="logo" alt="Logo" class="logo" />

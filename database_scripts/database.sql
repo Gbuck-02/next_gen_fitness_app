@@ -1,4 +1,4 @@
-#use the current database
+#use the current database (will need to create it first if not already done)
 USE meal_tracker;
 
 #creating the various tables in the meal_tracker database
@@ -33,13 +33,13 @@ ALTER TABLE meal_statistics ADD COLUMN coach_comment VARCHAR(255);
 ALTER TABLE clients ADD COLUMN coach_code VARCHAR(10) UNIQUE;
 
 #adds dummy data into the database for testing purposes
-INSERT INTO clients(username, pass, isCoach, coach) VALUES ('Marcus','1234', TRUE, ''), ('Anna', '5678', FALSE, 'Marcus');
+INSERT INTO clients(username, pass, isCoach, coach) VALUES ('Marcus','$2b$10$WORoDxddKJK2NGFuPIWI0OaY794PdjCI4C3N3hqMprcDPlLF0.fmy', TRUE, ''), ('Anna', '5678', FALSE, 'Marcus');
 INSERT INTO meal_statistics(client_id, meal_date, meal_time, food, calories, fat, carbs, protein, comments) VALUES 
 (1, CURRENT_DATE, CURRENT_TIME, 'protein shake', 25.0, 0.0, 0.0, 20.0,""),
 (2, CURRENT_DATE, CURRENT_TIME, 'salad', 20, 0, 0, 0, "Not sure how many for fat.carbs etc.");
 UPDATE clients SET coach_code = 'C-36528' WHERE username = 'Marcus';
 
-#previews what the tables and entries look like
+#previews what the tables and entries look like (not necessary)
 SELECT * FROM clients;
 SELECT * FROM meal_statistics;
 SELECT * FROM coach_invites;

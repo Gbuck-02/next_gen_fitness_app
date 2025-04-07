@@ -4,7 +4,7 @@
   
       <button @click="home">Home</button>
 
-      <button @click="stats">{{ username }}'s Meal Entries</button>
+      <button @click="stats">{{ username }}'s Entries</button>
 
       <div v-if="isCoach === 'true'">
         <router-link :to="{ name: 'clients', query: { username: this.coach, isCoach: this.isCoach, coach: this.homeCoach } }">
@@ -14,7 +14,7 @@
 
       <div class="coach-view">
   
-      <h1 class="header-message">Edit {{ username }}'s Meal Entry</h1>
+      <h1 class="header-message">Edit {{ username }}'s Entry</h1>
   
       <label for="food">Food:</label>
       <input id="food" v-model="food" />
@@ -41,125 +41,132 @@
 </template>
 <script>
 export default {
-    data() {
-        return {
-            username: this.$route.query.username,
-            isCoach: this.$route.query.isCoach,
-            coach: this.$route.query.coach || null,
-            homeCoach: null,
-            date: this.$route.query.date,
-            meal: this.$route.query.meal ? this.decodeBase64(this.$route.query.meal) : null,
-            calories: '',
-            fat: '',
-            carbs: '',
-            protein: '',
-            coach_comments: '',
-            food: '',
-            originalMeal: null
-        };
-    },
-    created() {
-        if (this.$route.query.meal) {
-            this.meal = this.decodeBase64(this.$route.query.meal);
-            const mealObject = JSON.parse(this.meal);
+  data() {
+    return {
+      username: this.$route.query.username,
+      isCoach: this.$route.query.isCoach,
+      coach: this.$route.query.coach || null,
+      homeCoach: null,
+      date: this.$route.query.date,
+      meal: this.$route.query.meal ? this.decodeBase64(this.$route.query.meal) : null,
+      calories: '',
+      fat: '',
+      carbs: '',
+      protein: '',
+      coach_comments: '',
+      food: '',
+      originalMeal: null
+    };
+  },
+  created() {
+    //Decode and populate form fields from passed in meal data
+    if (this.$route.query.meal) {
+      this.meal = this.decodeBase64(this.$route.query.meal);
+      const mealObject = JSON.parse(this.meal);
 
-            this.calories = mealObject.calories || 0;
-            this.fat = mealObject.fat || '';
-            this.carbs = mealObject.carbs || '';
-            this.protein = mealObject.protein || '';
-            this.coach_comments = mealObject.coach_comments || '';
-            this.food = mealObject.food;
+      this.calories = mealObject.calories || 0;
+      this.fat = mealObject.fat || '';
+      this.carbs = mealObject.carbs || '';
+      this.protein = mealObject.protein || '';
+      this.coach_comments = mealObject.coach_comments || '';
+      this.food = mealObject.food;
 
-            this.originalMeal = {
-                food: this.food,
-                calories: this.calories,
-                fat: this.fat,
-                carbs: this.carbs,
-                protein: this.protein,
-                coach_comments: this.coach_comments,
-                date: this.date,
-            };
+      //Store a copy of the original meal to compare later when editing
+      this.originalMeal = {
+        food: this.food,
+        calories: this.calories,
+        fat: this.fat,
+        carbs: this.carbs,
+        protein: this.protein,
+        coach_comments: this.coach_comments,
+        date: this.date
+      };
 
-            this.originalMeal = JSON.parse(JSON.stringify(this.originalMeal));
-        }
-    },
-    methods: {
-        redirect() {
-          this.$router.push({ name: 'login' });
-        },
-        home() {
-          this.isCoach = true;
-          this.$router.push({
-              name: 'home',
-              query: {
-                username: this.coach,
-                isCoach: this.isCoach,
-                coach: this.homeCoach
-              }
-            });
-        },
-
-        stats(){
-          this.$router.push({
-              name: 'clientstats',
-              query: {
-                username: this.username,
-                isCoach: this.isCoach,
-                coach: this.coach
-              }
-            });
-        },
-        decodeBase64(encodedData) {
-          return JSON.parse(decodeURIComponent(atob(encodedData)));
-        },
-        editMeal() {
-            const editedMeal = {
-                food: this.food,
-                calories: this.calories,
-                fat: this.fat,
-                carbs: this.carbs,
-                protein: this.protein,
-                coach_comments: this.coach_comments,
-                date: this.date,
-            };
-
-            const mealsData = {
-                originalMeal: this.originalMeal,
-                editedMeal: editedMeal,
-            };
-
-            // Send both original and edited meals to the API
-            fetch(`http://localhost:3000/api/editMealClient?username=${this.username}`, {
-                method: 'PUT', // Use PUT to update an existing record
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(mealsData), // Send both original and edited meals
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    alert('Meal updated successfully!');
-                    this.$router.push({
-                      name: 'clientstats',
-                      query: {
-                        username: this.username,
-                        isCoach: this.isCoach,
-                        coach: this.coach
-                      }
-                    });
-                }
-            })
-            .catch(error => {
-                console.error("Error updating meal:", error);
-                alert('An error occurred while updating the meal.');
-            });
-        }
-
+      //Copy to avoid reference issues
+      this.originalMeal = JSON.parse(JSON.stringify(this.originalMeal));
     }
-}
-</script>
+  },
+  methods: {
+    //Navigate back to login page
+    redirect() {
+      this.$router.push({ name: 'login' });
+    },
 
+    //Navigate to home page with coach info
+    home() {
+      this.isCoach = true;
+      this.$router.push({
+        name: 'home',
+        query: {
+          username: this.coach,
+          isCoach: this.isCoach,
+          coach: this.homeCoach
+        }
+      });
+    },
+
+    //Navigate to the client's home page
+    stats() {
+      this.$router.push({
+        name: 'clientstats',
+        query: {
+          username: this.username,
+          isCoach: this.isCoach,
+          coach: this.coach
+        }
+      });
+    },
+
+    //Decode a Base64-encoded meal object string into JSON
+    decodeBase64(encodedData) {
+      return JSON.parse(decodeURIComponent(atob(encodedData)));
+    },
+
+    //Submit updated meal info to the server
+    editMeal() {
+      const editedMeal = {
+        food: this.food,
+        calories: this.calories,
+        fat: this.fat,
+        carbs: this.carbs,
+        protein: this.protein,
+        coach_comments: this.coach_comments,
+        date: this.date
+      };
+
+      const mealsData = {
+        originalMeal: this.originalMeal,
+        editedMeal: editedMeal
+      };
+
+      fetch(`http://localhost:3000/api/editMealClient?username=${this.username}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(mealsData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          alert('Entry updated successfully!');
+          this.$router.push({
+            name: 'clientstats',
+            query: {
+              username: this.username,
+              isCoach: this.isCoach,
+              coach: this.coach
+            }
+          });
+        }
+      })
+      .catch(error => {
+        alert('An error occurred while updating the entry.');
+      });
+    }
+  }
+};
+</script>
 <style scoped>
 .editMeal-container {
   padding: 20px;
@@ -275,9 +282,9 @@ button {
 }
 
 .coach-view{
-    border: 5px solid #0b6dff; /* Blue border around the container */
-    border-radius: 10px; /* Rounded corners for the border */
-    margin: 20px auto; /* Center the container with some margin */
+    border: 5px solid #0b6dff;
+    border-radius: 10px;
+    margin: 20px auto;
     max-width: 1500px
 }
 </style>

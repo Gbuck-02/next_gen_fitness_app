@@ -2,12 +2,11 @@ const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const app = express(); // Initialize app first
+const app = express(); //app initialization
 
-app.use(bodyParser.json()); // Middleware to parse JSON
-app.use(cors()); // Enable CORS for all routes
+app.use(bodyParser.json());
+app.use(cors()); //enable CORS for all routes (avoid security issues)
 
-// Various routes
 const loginRoutes = require('./routes/loginRoutes');
 const newuserRoutes = require('./routes/newuserRoutes');
 const getstatsRoutes = require('./routes/getstatsRoutes');
@@ -22,7 +21,7 @@ const decreqRoutes = require('./routes/decreqRoutes');
 const editmealclientRoutes = require('./routes/editmealclientRoutes');
 const getcoachcodeRoutes = require('./routes/getcoachcodeRoutes');
 
-// Having the API use the routes
+//having the API use the routes
 app.use('/api', loginRoutes);
 app.use('/api', newuserRoutes);
 app.use('/api', getstatsRoutes);
@@ -37,7 +36,7 @@ app.use('/api', decreqRoutes);
 app.use('/api', editmealclientRoutes);
 app.use('/api', getcoachcodeRoutes);
 
-// Start API server
+//host API server on localhost
 const port = 3000;
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

@@ -11,7 +11,7 @@
 export default {
   data() {
     return {
-      logo: require('@/components/NextGenLogo.webp'), // Path to your logo
+      logo: require('@/components/NextGenLogo.webp'), // Path to logo image
     };
   },
 };
@@ -26,13 +26,13 @@ export default {
 
 /* Header styling */
 .app-header {
-  padding: 10px 10px; /* Reduced padding to make the header smaller */
-  margin-bottom: -10px; /* Reduced margin to avoid pushing the content too far */
+  padding: 10px 10px;
+  margin-bottom: -10px;
 }
 
 /* Adjust the logo size */
 .logo {
-  width: 150px;  /* Set a smaller width for the logo */
-  height: auto;  /* Maintain aspect ratio */
+  width: 150px;
+  height: auto;
 }
 </style>
