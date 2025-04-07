@@ -3,22 +3,22 @@
     <button @click="redirect">Log Out</button>
     <button @click="home">Home</button>
 
-    <h1 class="header-message">Quick Add a Previous Meal</h1>
+    <h1 class="header-message">Quick Log a Previous Food</h1>
 
-    <!-- First Dropdown: Unique Meal Names -->
-    <label for="food">Select Meal:</label>
+    <!-- First dropdown unique meal names -->
+    <label for="food">Select Previously Logged Food:</label>
     <select id="food" v-model="selectedMealName" @change="updateMealInstances">
-      <option value="null" disabled selected hidden>Select a Previous Meal</option>
+      <option value="null" disabled selected hidden>Select Food</option>
       <option v-for="meal in sortedUniqueMealNames" :key="meal" :value="meal">
         {{ meal }}
       </option>
     </select>
 
-    <!-- Second Dropdown: Specific Meal Instances -->
+    <!-- Second dropdown for specific meal instances -->
     <div v-if="selectedMealName">
-      <label for="mealInstance">Select Meal Instance:</label>
+      <label for="mealInstance">Select Entry Instance:</label>
       <select id="mealInstance" v-model="selectedMeal" @change="fillNutritionalValues">
-        <option value="null" disabled selected hidden>Select a specific meal</option>
+        <option value="null" disabled selected hidden>Select a specific food entry</option>
         <option v-for="meal in mealInstances" :key="meal.id" :value="meal">
           {{ meal.food }} ({{ meal.formatted_date }})
         </option>
@@ -51,30 +51,36 @@ export default {
       username: this.$route.query.username,
       isCoach: this.$route.query.isCoach,
       coach: this.$route.query.coach,
-      foodOptions: [],  // Full list of food items from the database
-      uniqueMealNames: [],  // Unique meal names for the first dropdown
-      mealInstances: [],  // Filtered list of meals matching the selected meal name
-      selectedMealName: null,  // Meal name selected from the first dropdown
-      selectedMeal: null,  // Specific meal instance selected from the second dropdown
+      // Data related to the meals
+      foodOptions: [],
+      uniqueMealNames: [],
+      mealInstances: [],
+      selectedMealName: null,
+      selectedMeal: null,
       calories: '',
       fat: '',
       carbs: '',
       protein: '',
-      comments: '',
+      comments: ''
     };
   },
   created() {
+    //Fetch the food options (meal data) as soon as the component is created
     this.fetchFoodOptions();
   },
   computed: {
-  sortedUniqueMealNames() {
-    return this.uniqueMealNames.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
-  }
+    //Sort the unique meal names alphabetically (case-insensitive)
+    sortedUniqueMealNames() {
+      return this.uniqueMealNames.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+    }
   },
   methods: {
+    //Navigate back to the login screen
     redirect() {
       this.$router.push({ name: 'login' });
     },
+
+     //Navigate the user to the home page
     home() {
       this.$router.push({
         name: 'home',
@@ -85,6 +91,8 @@ export default {
         }
       });
     },
+
+    //Fetch food options (meal data) from the backend
     fetchFoodOptions() {
       fetch(`http://localhost:3000/api/getMeals?username=${this.username}`)
         .then(response => response.json())
@@ -94,49 +102,54 @@ export default {
           } else {
             this.foodOptions = data;
 
-            // Extract unique meal names
             const uniqueNames = [...new Set(data.map(meal => meal.food))];
             this.uniqueMealNames = uniqueNames;
           }
         })
         .catch(error => console.error('Error fetching food options:', error));
     },
+
+    //Update the list of meal instances based on the selected meal name
     updateMealInstances() {
       if (this.selectedMealName) {
-        // Filter the full list to get only instances of the selected meal name
+        //Filter the food options to get only the meals that match the selected name
         this.mealInstances = this.foodOptions.filter(meal => meal.food === this.selectedMealName);
-        this.selectedMeal = null; // Reset selection
+        this.selectedMeal = null;
       }
     },
+
+    //Fill in the nutritional values (calories, fat, carbs, protein) based on the selected meal
     fillNutritionalValues() {
       if (this.selectedMeal) {
+        //Populate the input fields with the selected meal's nutritional values
         this.calories = this.selectedMeal.calories;
         this.fat = this.selectedMeal.fat;
         this.carbs = this.selectedMeal.carbs;
         this.protein = this.selectedMeal.protein;
       } else {
-        // Reset values if no meal is selected
+        //Reset values if no meal is selected
         this.calories = '';
         this.fat = '';
         this.carbs = '';
         this.protein = '';
       }
     },
+
+    //Submit the selected meal data to the backend
     submitData() {
       if (!this.selectedMeal) {
-        alert("Must select a specific meal instance!");
+        alert("Must select a specific entry instance!");
         return;
       }
-
       const meal = {
         food: this.selectedMeal.food,
         calories: this.calories,
         fat: this.fat,
         carbs: this.carbs,
         protein: this.protein,
-        comments: this.comments,
+        comments: this.comments
       };
-
+      //Send the meal data to the backend via a POST request
       fetch(`http://localhost:3000/api/addmeal?username=${this.username}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -147,13 +160,13 @@ export default {
         if (data.error) {
           alert(data.error);
         } else {
-          alert('Meal added successfully!');
+          alert('Entry logged!');
           this.$router.push({
             name: 'home',
             query: {
               username: this.username,
               isCoach: this.isCoach,
-              coach: this.coach,
+              coach: this.coach
             },
           });
         }
@@ -162,7 +175,6 @@ export default {
   }
 }
 </script>
-
 <style scoped>
 .addMeal-container {
   padding: 20px;
@@ -190,42 +202,42 @@ input,
 textarea,
 select {
   width: 100%;
-  padding: 10px; /* Adjusted padding for consistency */
+  padding: 10px;
   margin: 5px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 14px; /* Consistent font size */
-  background-color: #fff; /* Ensuring input background color consistency */
+  font-size: 14px;
+  background-color: #fff;
 }
 
 button {
-  all: unset; /* Reset default button styles */
+  all: unset;
   cursor: pointer;
-  padding: 10px 20px; /* Consistent padding */
-  font-size: 16px; /* Consistent font size for buttons */
-  border-radius: 4px; /* Rounded corners */
-  border: 1px solid #ccc; /* Border color */
-  background-color: #0b6dff; /* Primary button color */
-  color: white; /* Text color */
-  margin: 10px 5px; /* Space between buttons */
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px; 
+  border: 1px solid #ccc; 
+  background-color: #0b6dff; 
+  color: white; 
+  margin: 10px 5px; 
   transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
 button:hover {
-  background-color: #0854cc; /* Darker shade on hover */
-  transform: translateY(-2px); /* Slight hover effect */
+  background-color: #0854cc;
+  transform: translateY(-2px);
 }
 
 button:focus {
-  outline: none; /* Remove focus outline */
+  outline: none; 
 }
 
 textarea {
-  resize: vertical; /* Allow vertical resizing */
+  resize: vertical; 
 }
 
 select {
-  cursor: pointer; /* Make the select dropdown more interactive */
+  cursor: pointer; 
 }
 
 .meal-search {

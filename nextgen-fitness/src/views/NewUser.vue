@@ -30,6 +30,9 @@ export default {
     };
   },
   methods: {
+    //Sends a POST request to the backend to create a new user account
+    //If successful redirects the user to the 'home' page with the account details
+    //If there's an error ex:(username taken) it displays an alert with the error
     newUserLogin() {
       const newUserData = {
         username: this.user,
@@ -60,14 +63,12 @@ export default {
           }
         })
         .catch((error) => {
-          console.error('Error:', error);
           alert('An error occurred while creating the user.');
         });
     },
   },
 };
 </script>
-
 <style scoped>
 .newUser {
   font-family: 'Arial', sans-serif;

@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login-container">
-      <h1>NextGen Nutrition</h1>
+      <h1>Team NextGen Nutrition</h1>
       <h3>Please enter your username and password to log in</h3>
 
       <div class="input-group">
@@ -31,6 +31,9 @@ export default {
     };
   },
   methods: {
+    //Handles the login process by sending the username and password to the backend
+    //If the credentials are valid it redirects to the 'home' page with query parameters
+    //If not it shows an error message
     handleLogin() {
       const loginData = {
         username: this.user,
@@ -65,6 +68,7 @@ export default {
         });
     },
 
+    //Redirects the user to the new user page
     addNewUser() {
       this.$router.push({
         name: 'newuser',

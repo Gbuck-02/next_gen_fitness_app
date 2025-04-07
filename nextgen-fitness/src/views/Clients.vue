@@ -4,11 +4,10 @@
 
     <button @click="viewInvites">Client Requests</button>
 
-    <h1 class="header-message">Clients of Coach: {{ username }}</h1>
-
     <p class="coach-code"> Your Coach Code is: {{ coachCode }}</p>
 
-    <!-- Clients List -->
+    <h1 class="header-message">Current Clients</h1>
+
     <ul class="clients-list">
       <li 
         v-for="client in clients" 
@@ -19,10 +18,9 @@
       </li>
     </ul>
 
-    <!-- Pop-up Invite Box -->
     <div v-if="showPopup" class="popup">
       <div class="popup-content">
-        <h3>Requests for Coach: {{ username }}</h3>
+        <h3>Active Requests</h3>
         <div v-if="invites.length === 0" class="no-invites">
           No Requests
         </div>
@@ -41,7 +39,6 @@
     </div>
   </div>
 </template>
-
 <script>
 export default {
   data() {
@@ -50,18 +47,20 @@ export default {
       isCoach: this.$route.query.isCoach,
       coach: this.$route.query.coach || null,
       clients: [],
-      invites: [],  // Holds the fetched invites
-      showPopup: false,  // Controls the visibility of the popup
+      invites: [],
+      showPopup: false,
       coachCode: ""
     };
   },
   created() {
+    //Fetch initial client list and coach code on component creation
     if (this.clients.length === 0) {
       this.fetchClients();
     }
-    this.fetchCoachCode(); // Retrieve coach code on component creation
+    this.fetchCoachCode();
   },
   methods: {
+    //Fetches the list of clients assigned to the current coach
     async fetchClients() {
       try {
         const response = await fetch(`http://localhost:3000/api/clients?coach=${this.username}`);
@@ -70,12 +69,14 @@ export default {
         if (data.error) {
           console.error('Error fetching clients:', data.error);
         } else {
-          this.clients = data.clients || []; // Ensure clients is always an array
+          this.clients = data.clients || [];
         }
       } catch (error) {
         console.error('Error:', error);
       }
     },
+
+    //Retrieves the coach code associated with the current coach
     async fetchCoachCode() {
       try {
         const response = await fetch(`http://localhost:3000/api/coach-code?coach=${this.username}`);
@@ -87,6 +88,8 @@ export default {
         console.error('Error fetching coach code:', error);
       }
     },
+
+    //Navigates to the selected client's statistics page
     handleClientClick(clientName) {
       this.$router.push({
         name: 'clientstats',
@@ -96,11 +99,14 @@ export default {
           coach: this.username
         }
       });
-      // Handle client selection logic here
     },
+
+    //Triggered when the user clicks to view invites
     viewInvites() {
-      this.fetchInvites();  // Fetch invites when the button is clicked
+      this.fetchInvites();
     },
+
+    //Fetches all pending invites sent to this coach
     async fetchInvites() {
       try {
         const response = await fetch(`http://localhost:3000/api/invites?coach=${this.username}`);
@@ -109,33 +115,27 @@ export default {
         if (data.error) {
           console.error('Error fetching invites:', data.error);
         } else {
-          this.invites = data.invites || [];  // Default to an empty array if no invites
-          this.showPopup = true;  // Show the popup
+          this.invites = data.invites || [];
+          this.showPopup = true;
         }
       } catch (error) {
         console.error('Error:', error);
       }
     },
-    // Inside your Vue component methods
+
+    //Accepts a specific client invite and updates client and invite list
     async acceptInvite(username) {
       try {
         const response = await fetch('http://localhost:3000/api/accept-invite', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: username,
-            coach: this.username,
-          }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, coach: this.username }),
         });
 
         const data = await response.json();
         
         if (data.message) {
-          // Handle successful invite acceptance
-          console.log(data.message);
-          this.fetchInvites();  // Refresh invites
+          this.fetchInvites();
           this.fetchClients();
         } else {
           console.error(data.error);
@@ -145,25 +145,19 @@ export default {
       }
     },
 
+    //Declines a specific client invite and refreshes the invite list
     async declineInvite(username) {
       try {
         const response = await fetch('http://localhost:3000/api/decline-invite', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: username,
-            coach: this.username,
-          }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, coach: this.username }),
         });
 
         const data = await response.json();
         
         if (data.message) {
-          // Handle successful invite decline
-          console.log(data.message);
-          this.fetchInvites();  // Refresh invites
+          this.fetchInvites();
         } else {
           console.error(data.error);
         }
@@ -172,9 +166,12 @@ export default {
       }
     },
 
+    //Closes the invites popup window
     closePopup() {
-      this.showPopup = false;  // Close the popup
+      this.showPopup = false;
     },
+
+    //Navigate the user to the home page
     home() {
       this.$router.push({
         name: 'home',
@@ -188,7 +185,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .clients-container {
   padding: 20px;

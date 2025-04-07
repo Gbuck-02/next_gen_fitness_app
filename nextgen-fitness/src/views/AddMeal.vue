@@ -1,99 +1,107 @@
 <template>
-    <div class="addMeal-container">
-      <button @click="redirect">Log Out</button>
+  <div class="addMeal-container">
+    <button @click="redirect">Log Out</button>
 
-      <button @click="home">Home</button>
+    <button @click="home">Home</button>
 
-      <button @click="addPreviousMeal">Quick Add a Meal</button>
+    <button @click="addPreviousMeal">Quick Log</button>
 
-      <h1 class="header-message">Enter a New Meal</h1>
+    <h1 class="header-message">Log a Food Item</h1>
   
-      <label for="food">Enter Meal/Food Eaten:</label>
-      <input type="text" id="food" v-model="food" placeholder="Enter food" />
+    <label for="food">Enter Food:</label>
+    <input type="text" id="food" v-model="food" placeholder="Enter food" />
   
-      <label for="calories">Enter Calories:</label>
-      <input type="number" id="calories" v-model="calories" placeholder="Enter calories" min="0" @input="calories = calories < 0 ? '' : calories" />
+    <label for="calories">Enter Calories:</label>
+    <input type="number" id="calories" v-model="calories" placeholder="Enter calories" min="0" @input="calories = calories < 0 ? '' : calories" />
   
-      <label for="fat">Enter Fat (g):</label>
-      <input type="number" id="fat" v-model="fat" placeholder="Enter fat (g)" min="0" @input="fat = fat < 0 ? '' : fat" />
+    <label for="fat">Enter Fat (g):</label>
+    <input type="number" id="fat" v-model="fat" placeholder="Enter fat (g)" min="0" @input="fat = fat < 0 ? '' : fat" />
   
-      <label for="carbs">Carbs (g):</label>
-      <input type="number" id="carbs" v-model="carbs" placeholder="Enter carbs (g)" min="0" @input="carbs = carbs < 0 ? '' : carbs" />
+    <label for="carbs">Carbs (g):</label>
+    <input type="number" id="carbs" v-model="carbs" placeholder="Enter carbs (g)" min="0" @input="carbs = carbs < 0 ? '' : carbs" />
 
   
-      <label for="protein">Enter Protein (g):</label>
-      <input type="number" id="protein" v-model="protein" placeholder="Enter protein (g)" min="0" @input="protein = protein < 0 ? '' : protein" />
+    <label for="protein">Enter Protein (g):</label>
+    <input type="number" id="protein" v-model="protein" placeholder="Enter protein (g)" min="0" @input="protein = protein < 0 ? '' : protein" />
   
-      <label for="comments">Enter Comments:</label>
-      <textarea id="comments" v-model="comments" placeholder="Additional notes"></textarea>
+    <label for="comments">Enter Comments:</label>
+    <textarea id="comments" v-model="comments" placeholder="Additional notes"></textarea>
   
-      <button @click="submitData">Submit</button>
-    </div>
-  </template>
+    <button @click="submitData">Submit</button>
+  </div>
+</template>
   
-  <script>
+<script>
   export default {
     data() {
-        return {
-            username: this.$route.query.username,
-            isCoach: this.$route.query.isCoach,
-            coach: this.$route.query.coach,
-            food: '',
-            calories: '',
-            fat: '',
-            carbs: '',
-            protein: '',
-            comments: ''
-        };
+      return {
+        username: this.$route.query.username,
+        isCoach: this.$route.query.isCoach,
+        coach: this.$route.query.coach,
+        food: '',
+        calories: '',
+        fat: '',
+        carbs: '',
+        protein: '',
+        comments: ''
+      };
     },
-  methods: {
-    redirect() {
-      this.$router.push({ name: 'login' });
-    },
-    home(){
-      this.$router.push({
-        name: 'home',
+    methods: {
+      //Navigate back to the login screen
+      redirect() {
+        this.$router.push({ name: 'login' });
+      },
+  
+      //Navigate the user to the home page
+      home() {
+        this.$router.push({
+          name: 'home',
           query: {
             username: this.username,
             isCoach: this.isCoach,
             coach: this.coach
           }
-      });
-    },
-    addPreviousMeal(){
-      this.$router.push({
-        name: 'addold',
-          query:{
+        });
+      },
+  
+      //Navigate the user to the "add old meal" page for quick meal adding
+      addPreviousMeal() {
+        this.$router.push({
+          name: 'addold',
+          query: {
             username: this.username,
             isCoach: this.isCoach,
             coach: this.coach
-        }
-      });
-    },
-    submitData() {
-      const meal = {
-        food: this.food.charAt(0).toUpperCase() + this.food.slice(1),
-        calories: this.calories,
-        fat: this.fat,
-        carbs: this.carbs,
-        protein: this.protein,
-        comments: this.comments
-      };
-
+          }
+        });
+      },
+  
+      //Submit the new meal data to the backend
+      submitData() {
+        //Prepare the meal data with proper capitalization for food name
+        const meal = {
+          food: this.food.charAt(0).toUpperCase() + this.food.slice(1),
+          calories: this.calories,
+          fat: this.fat,
+          carbs: this.carbs,
+          protein: this.protein,
+          comments: this.comments
+        };
+  
+        //Send the meal data to the backend via a POST request
         fetch(`http://localhost:3000/api/addmeal?username=${this.username}`, {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',  // Set content type to JSON
-            },
-            body: JSON.stringify(meal),  // Send the meal data in the body
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(meal),
         })
         .then(response => response.json())
         .then(data => {
-            if (data.error) {
-                alert(data.error);
-            }
-            else {
-            alert('Meal added successfully!');
+          if (data.error) {
+            alert(data.error);
+          } else {
+            alert('Entry logged!');
             this.$router.push({
               name: 'home',
               query: {
@@ -102,13 +110,12 @@
                 coach: this.coach
               },
             });
-            }
+          }
         });
       }
     }
   }
-  </script>
-  
+</script>
 <style scoped>
 .addMeal-container {
   padding: 20px;

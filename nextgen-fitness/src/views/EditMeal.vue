@@ -4,7 +4,7 @@
   
       <button @click="home">Home</button>
   
-      <h1 class="header-message">Edit Meal</h1>
+      <h1 class="header-message">Edit Entry</h1>
   
       <label for="food">Food:</label>
       <input id="food" v-model="food" />
@@ -29,105 +29,117 @@
 </template>
 <script>
 export default {
-    data() {
-        return {
-            username: this.$route.query.username,
-            isCoach: this.$route.query.isCoach,
-            coach: this.$route.query.coach || null,
-            date: this.$route.query.date,
-            meal: this.$route.query.meal ? this.decodeBase64(this.$route.query.meal) : null,
-            calories: '',
-            fat: '',
-            carbs: '',
-            protein: '',
-            comments: '',
-            food: '',
-            originalMeal: null
-        };
-    },
-    created() {
-        if (this.$route.query.meal) {
-            this.meal = this.decodeBase64(this.$route.query.meal);
-            const mealObject = JSON.parse(this.meal);
+  data() {
+    return {
+      username: this.$route.query.username,
+      isCoach: this.$route.query.isCoach,
+      coach: this.$route.query.coach || null,
+      date: this.$route.query.date,
+      // Decode and parse the meal object if it exists in the query
+      meal: this.$route.query.meal ? this.decodeBase64(this.$route.query.meal) : null,
+      calories: '',
+      fat: '',
+      carbs: '',
+      protein: '',
+      comments: '',
+      food: '',
+      // To keep track of the original meal before editing
+      originalMeal: null
+    };
+  },
+  created() {
+    //Populate the form fields with the passed in meal
+    if (this.$route.query.meal) {
+      this.meal = this.decodeBase64(this.$route.query.meal); // Decode and parse meal
+      const mealObject = JSON.parse(this.meal);
 
-            this.calories = mealObject.calories || 0;
-            this.fat = mealObject.fat || '';
-            this.carbs = mealObject.carbs || '';
-            this.protein = mealObject.protein || '';
-            this.comments = mealObject.comments || '';
-            this.food = mealObject.food;
+      //Fill form with meal values or fallback defaults
+      this.calories = mealObject.calories || 0;
+      this.fat = mealObject.fat || '';
+      this.carbs = mealObject.carbs || '';
+      this.protein = mealObject.protein || '';
+      this.comments = mealObject.comments || '';
+      this.food = mealObject.food;
 
-            this.originalMeal = {
-                food: this.food,
-                calories: this.calories,
-                fat: this.fat,
-                carbs: this.carbs,
-                protein: this.protein,
-                comments: this.comments,
-                date: this.date,
-            };
+      //Store a copy of the original meal
+      this.originalMeal = {
+        food: this.food,
+        calories: this.calories,
+        fat: this.fat,
+        carbs: this.carbs,
+        protein: this.protein,
+        comments: this.comments,
+        date: this.date,
+      };
 
-            this.originalMeal = JSON.parse(JSON.stringify(this.originalMeal));
-        }
-    },
-    methods: {
-        redirect() {
-            this.$router.push({ name: 'login' });
-        },
-        home() {
-            this.$router.push({
-                name: 'home',
-                query: {
-                    username: this.username,
-                    isCoach: this.isCoach,
-                    coach: this.coach
-                }
-            });
-        },
-        decodeBase64(encodedData) {
-            return JSON.parse(decodeURIComponent(atob(encodedData)));
-        },
-        editMeal() {
-            const editedMeal = {
-                food: this.food,
-                calories: this.calories,
-                fat: this.fat,
-                carbs: this.carbs,
-                protein: this.protein,
-                comments: this.comments,
-                date: this.date,
-            };
-
-            const mealsData = {
-                originalMeal: this.originalMeal,
-                editedMeal: editedMeal,
-            };
-
-            // Send both original and edited meals to the API
-            fetch(`http://localhost:3000/api/editMeal?username=${this.username}`, {
-                method: 'PUT', // Use PUT to update an existing record
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(mealsData), // Send both original and edited meals
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    alert('Meal updated successfully!');
-                    this.$router.push({
-                        name: 'home',
-                        query: { username: this.username, isCoach: this.isCoach, coach: this.coach }
-                    });
-                }
-            })
-            .catch(error => {
-                console.error("Error updating meal:", error);
-                alert('An error occurred while updating the meal.');
-            });
-        }
-
+      this.originalMeal = JSON.parse(JSON.stringify(this.originalMeal));
     }
+  },
+  methods: {
+    //Navigate back to login screen
+    redirect() {
+      this.$router.push({ name: 'login' });
+    },
+
+    //Navigate the user to the home page
+    home() {
+      this.$router.push({
+        name: 'home',
+        query: {
+          username: this.username,
+          isCoach: this.isCoach,
+          coach: this.coach
+        }
+      });
+    },
+
+    //Decode a base64-encoded and URI-encoded string
+    decodeBase64(encodedData) {
+      return JSON.parse(decodeURIComponent(atob(encodedData)));
+    },
+
+    //Submit updated meal data
+    editMeal() {
+      //Create edited meal object
+      const editedMeal = {
+        food: this.food,
+        calories: this.calories,
+        fat: this.fat,
+        carbs: this.carbs,
+        protein: this.protein,
+        comments: this.comments,
+        date: this.date,
+      };
+
+      //Combine original and edited meal into one payload
+      const mealsData = {
+        originalMeal: this.originalMeal,
+        editedMeal: editedMeal,
+      };
+
+      //Send a PUT request to update the meal entry
+      fetch(`http://localhost:3000/api/editMeal?username=${this.username}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(mealsData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          alert('Entry updated!');
+          this.$router.push({
+            name: 'home',
+            query: { username: this.username, isCoach: this.isCoach, coach: this.coach }
+          });
+        }
+      })
+      .catch(error => {
+        alert('An error occurred while updating the entry.');
+      });
+    }
+  }
 }
 </script>
 
@@ -182,7 +194,7 @@ button:hover {
 }
 
 button:focus {
-  outline: none; /* Remove focus outline */
+  outline: none;
 }
 
 .date-navigation {
