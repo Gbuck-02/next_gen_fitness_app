@@ -32,12 +32,12 @@
     <input type="number" id="fat" v-model="fat" placeholder="Enter fat (g)" min="0" @input="fat = fat < 0 ? '' : fat" />
 
     <label for="carbs">Carbs (g):</label>
-    <input type="number" id="carbs" v-model="carbs" placeholder="Enter carbs (g)" min="0" @input="carbs = carbs < 0 ? '' : carbs" />
+    <input type="number" id="carbs" v-model="carbs" placeholder="Enter carbohydrates (g)" min="0" @input="carbs = carbs < 0 ? '' : carbs" />
 
     <label for="protein">Protein (g):</label>
     <input type="number" id="protein" v-model="protein" placeholder="Enter protein (g)" min="0" @input="protein = protein < 0 ? '' : protein" />
 
-    <label for="comments">Enter Comments:</label>
+    <label for="comments">Comments:</label>
     <textarea id="comments" v-model="comments" placeholder="Additional notes"></textarea>
 
     <button @click="submitData">Submit</button>

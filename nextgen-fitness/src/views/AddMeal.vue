@@ -8,23 +8,23 @@
 
     <h1 class="header-message">Log a Food Item</h1>
   
-    <label for="food">Enter Food:</label>
+    <label for="food">Food:</label>
     <input type="text" id="food" v-model="food" placeholder="Enter food" />
   
-    <label for="calories">Enter Calories:</label>
+    <label for="calories">Calories:</label>
     <input type="number" id="calories" v-model="calories" placeholder="Enter calories" min="0" @input="calories = calories < 0 ? '' : calories" />
   
-    <label for="fat">Enter Fat (g):</label>
+    <label for="fat">Fat (g):</label>
     <input type="number" id="fat" v-model="fat" placeholder="Enter fat (g)" min="0" @input="fat = fat < 0 ? '' : fat" />
   
-    <label for="carbs">Carbs (g):</label>
-    <input type="number" id="carbs" v-model="carbs" placeholder="Enter carbs (g)" min="0" @input="carbs = carbs < 0 ? '' : carbs" />
+    <label for="carbs">Carbs  (g):</label>
+    <input type="number" id="carbs" v-model="carbs" placeholder="Enter carbohydrates (g)" min="0" @input="carbs = carbs < 0 ? '' : carbs" />
 
   
-    <label for="protein">Enter Protein (g):</label>
+    <label for="protein">Protein (g):</label>
     <input type="number" id="protein" v-model="protein" placeholder="Enter protein (g)" min="0" @input="protein = protein < 0 ? '' : protein" />
   
-    <label for="comments">Enter Comments:</label>
+    <label for="comments">Comments:</label>
     <textarea id="comments" v-model="comments" placeholder="Additional notes"></textarea>
   
     <button @click="submitData">Submit</button>
