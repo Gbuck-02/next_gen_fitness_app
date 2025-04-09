@@ -8,7 +8,7 @@
 
       <div v-if="isCoach === 'true'">
         <router-link :to="{ name: 'clients', query: { username: this.coach, isCoach: this.isCoach, coach: this.homeCoach } }">
-          <button>Clients</button>
+          <button>Client Access</button>
         </router-link>
       </div>
 
