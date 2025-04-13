@@ -5,7 +5,7 @@
     <button @click="addMeal">Log Food</button>
 
     <!-- Show 'Add a Coach' button only if user is not a coach and doesn't already have a coach -->
-    <button v-if="isCoach !== 'true' && coach === null" @click="addCoach">Add a Coach</button>
+    <button v-if="isCoach !== 'true' && coach === null" @click="addCoach">Connect with Coach</button>
 
     <!-- Show 'Clients' button only if user is a coach -->
     <div v-if="isCoach === 'true'">
