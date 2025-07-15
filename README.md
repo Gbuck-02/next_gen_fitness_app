@@ -1,4 +1,4 @@
-Team NextGen Nutrition App
+Team NextGen Nutrition App (All code is contained in the master branch)
 ---Overview
 Team NextGen Nutrition is a meal tracking web application designed to improve client-coach communication and streamline food logging for fitness coaching. It was built as a senior capstone project to serve the needs of a real client — Kyle Kropfelder, founder of Team NextGen. This app integrates detailed food logging with coach access to client data, enabling a fully interactive experience similar to existing workout-tracking platforms, but tailored specifically to nutrition.
 
